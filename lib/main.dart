@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 
@@ -37,19 +36,5 @@ class MyStatelessWidget extends StatelessWidget {
         backgroundColor: Colors.green,
       ),
     );
-  }
-}
-
-class CellWidget extends StatelessWidget {
-  const CellWidget({
-    Key? key,
-    required this.cell,
-  }) : super(key: key);
-
-  final Cell cell;
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(cell.value.toString());
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:genetic_sudoku/main.dart';
 import 'package:genetic_sudoku/models/grid.dart';
+import 'package:genetic_sudoku/widgets/cell_widget.dart';
 
 class GridWidget extends StatelessWidget {
   const GridWidget({
