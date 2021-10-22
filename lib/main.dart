@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/models/grid.dart';
 
 void main() => runApp(const MyApp());
 
@@ -21,6 +22,7 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(Grid().cells.first);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Floating Action Button'),
