@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/models/grid.dart';
+import 'package:genetic_sudoku/widgets/grid_widget.dart';
 
 void main() => runApp(const MyApp());
 
@@ -36,30 +35,6 @@ class MyStatelessWidget extends StatelessWidget {
         onPressed: () {},
         child: const Icon(Icons.navigation),
         backgroundColor: Colors.green,
-      ),
-    );
-  }
-}
-
-class GridWidget extends StatelessWidget {
-  const GridWidget({
-    Key? key,
-    required this.grid,
-  }) : super(key: key);
-
-  final Grid grid;
-
-  @override
-  Widget build(BuildContext context) {
-    return Table(
-      children: List.generate(
-        9,
-        (y) => TableRow(
-          children: List.generate(
-            9,
-            (x) => CellWidget(cell: grid.getCell(position: Point(x, y))),
-          ),
-        ),
       ),
     );
   }
