@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 
 void main() => runApp(const MyApp());
@@ -22,17 +25,56 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Grid().cells.first);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Floating Action Button'),
       ),
-      body: const Center(child: Text('Press the button below!')),
+      body: Center(
+        child: GridWidget(grid: Grid()),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.navigation),
         backgroundColor: Colors.green,
       ),
     );
+  }
+}
+
+class GridWidget extends StatelessWidget {
+  const GridWidget({
+    Key? key,
+    required this.grid,
+  }) : super(key: key);
+
+  final Grid grid;
+
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      children: List.generate(
+        9,
+        (y) => TableRow(
+          children: List.generate(
+            9,
+            (x) => CellWidget(cell: grid.getCell(position: Point(x, y))),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class CellWidget extends StatelessWidget {
+  const CellWidget({
+    Key? key,
+    required this.cell,
+  }) : super(key: key);
+
+  final Cell cell;
+
+  @override
+  Widget build(BuildContext context) {
+    return Text(cell.value.toString());
   }
 }
