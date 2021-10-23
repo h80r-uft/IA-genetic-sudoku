@@ -14,13 +14,27 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Table(
-      children: List.generate(
-        9,
-        (y) => TableRow(
-          children: List.generate(
-            9,
-            (x) => CellWidget(cell: grid.getCell(position: Point(x, y))),
+    return SizedBox(
+      width: 500,
+      child: Table(
+        border: TableBorder.all(
+          color: Colors.pink,
+          width: 2,
+        ),
+        children: List.generate(
+          9,
+          (y) => TableRow(
+            children: List.generate(
+              9,
+              (x) => SizedBox(
+                height: 500 / 9,
+                child: Center(
+                  child: CellWidget(
+                    cell: grid.getCell(position: Point(x, y)),
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       ),
