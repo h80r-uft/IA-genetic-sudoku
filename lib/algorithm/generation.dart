@@ -1,8 +1,8 @@
 import 'package:genetic_sudoku/algorithm/chromosome.dart';
 
 class Generation {
-  Generation({required this.generationNumber}) {
-    population = List.filled(100, Chromosome());
+  Generation({required this.generationNumber, required int size}) {
+    population = List.filled(size, Chromosome());
   }
 
   late final List<Chromosome> population;
