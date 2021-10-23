@@ -11,6 +11,31 @@ class CellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(cell.value.toString());
+    final cord = [2, 5, 8];
+    final cord2 = [0, 3, 6];
+
+    return Container(
+      decoration: BoxDecoration(
+        color: cell.quadrant % 2 == 0 ? Colors.black12 : Colors.white,
+        border: Border(
+          right: cord.contains(cell.position.x)
+              ? const BorderSide(width: 2, color: Colors.pink)
+              : const BorderSide(color: Colors.transparent),
+          bottom: cord.contains(cell.position.y)
+              ? const BorderSide(width: 2, color: Colors.pink)
+              : const BorderSide(color: Colors.transparent),
+          left: cord2.contains(cell.position.x)
+              ? const BorderSide(width: 2, color: Colors.pink)
+              : const BorderSide(color: Colors.transparent),
+          top: cord2.contains(cell.position.y)
+              ? const BorderSide(width: 2, color: Colors.pink)
+              : const BorderSide(color: Colors.transparent),
+        ),
+      ),
+      height: 500 / 9,
+      child: Center(
+        child: Text(cell.value.toString()),
+      ),
+    );
   }
 }

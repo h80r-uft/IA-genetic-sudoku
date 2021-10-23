@@ -26,13 +26,8 @@ class GridWidget extends StatelessWidget {
           (y) => TableRow(
             children: List.generate(
               9,
-              (x) => SizedBox(
-                height: 500 / 9,
-                child: Center(
-                  child: CellWidget(
-                    cell: grid.getCell(position: Point(x, y)),
-                  ),
-                ),
+              (x) => CellWidget(
+                cell: grid.getCell(position: Point(x, y)),
               ),
             ),
           ),
