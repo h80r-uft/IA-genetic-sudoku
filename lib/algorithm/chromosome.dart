@@ -13,9 +13,9 @@ class Chromosome {
   Chromosome.fromParents(
     Chromosome parent1,
     Chromosome parent2, {
+    required int crossingPoint,
     required double mutationRate,
   }) {
-    final crossingPoint = Random().nextInt(81);
     final genes1 = parent1.genes.sublist(0, crossingPoint);
     final genes2 = parent2.genes.sublist(crossingPoint);
     genes = List.from(genes1)..addAll(genes2);

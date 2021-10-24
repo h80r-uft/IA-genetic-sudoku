@@ -1,8 +1,41 @@
+import 'dart:math';
+
 import 'package:genetic_sudoku/algorithm/chromosome.dart';
 
 class Generation {
   Generation({required this.generationNumber, required int size}) {
     population = List.filled(size, Chromosome());
+  }
+
+  Generation.reproduce({
+    required this.generationNumber,
+    required Generation previous,
+    required double mutationRate,
+  }) {
+    final parents = List.generate(
+      previous.population.length - 2,
+      (index) => previous.getParent(),
+    );
+    final elitism = previous.fittest;
+    final variability = previous.unfittest;
+
+    population = [elitism, variability];
+
+    for (var i = 0; i < parents.length; i += 2) {
+      final crossingPoint = Random().nextInt(81);
+      population.add(Chromosome.fromParents(
+        parents[i],
+        parents[i + 1],
+        crossingPoint: crossingPoint,
+        mutationRate: mutationRate,
+      ));
+      population.add(Chromosome.fromParents(
+        parents[i + 1],
+        parents[i],
+        crossingPoint: crossingPoint,
+        mutationRate: mutationRate,
+      ));
+    }
   }
 
   late final List<Chromosome> population;
@@ -23,4 +56,7 @@ class Generation {
 
   Chromosome get fittest =>
       population.reduce((a, b) => a.fitness > b.fitness ? a : b);
+
+  Chromosome get unfittest =>
+      population.reduce((a, b) => a.fitness < b.fitness ? a : b);
 }
