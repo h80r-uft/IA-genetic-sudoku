@@ -22,10 +22,18 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final test = GeneticAlgorithm(maxGenerations: 1, populationSize: 100);
+    final test = GeneticAlgorithm(
+      maxGenerations: 10000,
+      populationSize: 100,
+      mutationRate: 0.3,
+    );
     test.initialize();
-    print(test.generations.last.fittest.fitness);
-
+    print('initial pop size: ${test.generations.last.population.length}');
+    while (!test.isFinished()) {
+      test.evolutionLoop();
+    }
+    print('final gen.: ${test.generations.last.generationNumber}');
+    print('final fit.: ${test.generations.last.fittest.fitness}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
