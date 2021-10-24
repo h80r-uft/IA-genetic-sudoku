@@ -16,4 +16,11 @@ class GeneticAlgorithm {
       size: populationSize,
     )..applyFitness());
   }
+
+  bool isFinished() {
+    final reachedMaxGenerations = generations.length >= maxGenerations;
+    final reachedRequiredFitness = generations.last.fittest.fitness >= 2025;
+
+    return reachedMaxGenerations || reachedRequiredFitness;
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
+import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
 
 void main() => runApp(const MyApp());
 
@@ -21,6 +22,10 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final test = GeneticAlgorithm(maxGenerations: 1, populationSize: 100);
+    test.initialize();
+    print(test.generations.last.fittest.fitness);
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
