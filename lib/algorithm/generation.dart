@@ -8,6 +8,12 @@ class Generation {
   late final List<Chromosome> population;
   final int generationNumber;
 
+  void applyFitness() {
+    for (var chromosome in population) {
+      chromosome.applyFitness();
+    }
+  }
+
   Chromosome get fittest =>
       population.reduce((a, b) => a.fitness > b.fitness ? a : b);
 }

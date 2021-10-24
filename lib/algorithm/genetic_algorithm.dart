@@ -14,6 +14,6 @@ class GeneticAlgorithm {
     generations.add(Generation(
       generationNumber: 0,
       size: populationSize,
-    ));
+    )..applyFitness());
   }
 }
