@@ -5,8 +5,10 @@ class Cell {
 
   final int value;
   final Point position;
+  var copiesInRange = 1;
+  var validShapes = 0;
 
-  int get quadrant => [
+  int get square => [
         [1, 2, 3],
         [4, 5, 6],
         [7, 8, 9]
@@ -14,6 +16,6 @@ class Cell {
 
   @override
   String toString() {
-    return 'p: $position | v: $value';
+    return 'p: $position | c: $copiesInRange | s: $validShapes | v: $value';
   }
 }
