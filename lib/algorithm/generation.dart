@@ -14,6 +14,13 @@ class Generation {
     }
   }
 
+  Chromosome getParent({double tournamentSize = 0.1}) {
+    final pool = population
+      ..shuffle()
+      ..take((tournamentSize * population.length).round());
+    return pool.reduce((best, e) => e.fitness > best.fitness ? e : best);
+  }
+
   Chromosome get fittest =>
       population.reduce((a, b) => a.fitness > b.fitness ? a : b);
 }
