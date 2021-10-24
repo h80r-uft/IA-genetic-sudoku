@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/grid.dart';
+import 'package:genetic_sudoku/widgets/grid_widget.dart';
 
 void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  static const String _title = 'Flutter Code Sample';
-
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
-      title: _title,
+      title: 'Genetic Sudoku',
       home: MyStatelessWidget(),
     );
   }
@@ -22,16 +21,13 @@ class MyStatelessWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print(Grid().cells.first);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Floating Action Button'),
-      ),
-      body: const Center(child: Text('Press the button below!')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.navigation),
+        title: const Text('Genetic Sudoku'),
         backgroundColor: Colors.green,
+      ),
+      body: Center(
+        child: GridWidget(grid: Grid()),
       ),
     );
   }

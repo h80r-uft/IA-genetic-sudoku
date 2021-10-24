@@ -7,9 +7,13 @@ class Grid {
     cells = List<Cell>.generate(
         81,
         (i) => Cell(
-              value: 0,
+              value: i,
               position: Point(i % 9, i ~/ 9),
             ));
+  }
+
+  Cell getCell({required Point position}) {
+    return cells.firstWhere((cell) => cell.position == position);
   }
 
   late final List<Cell> cells;
