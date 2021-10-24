@@ -10,6 +10,21 @@ class Chromosome {
     grid = Grid.fromChromosome(this);
   }
 
+  Chromosome.fromParents(
+    Chromosome parent1,
+    Chromosome parent2, {
+    required double mutationRate,
+  }) {
+    final crossingPoint = Random().nextInt(81);
+    final genes1 = parent1.genes.sublist(0, crossingPoint);
+    final genes2 = parent2.genes.sublist(crossingPoint);
+    genes = List.from(genes1)..addAll(genes2);
+
+    _mutate(mutationRate: mutationRate);
+
+    grid = Grid.fromChromosome(this);
+  }
+
   late final List<Gene> genes;
   late final Grid grid;
   late int fitness;
@@ -48,6 +63,14 @@ class Chromosome {
         .map((e) => pow(3, e.validShapes) - pow(2, e.copiesInRange) as int);
 
     fitness = fitnessPerGene.reduce((a, b) => a + b);
+  }
+
+  void _mutate({required double mutationRate}) {
+    for (var i = 0; i < genes.length; i++) {
+      if (Random().nextDouble() < mutationRate) {
+        genes[i] = Gene();
+      }
+    }
   }
 
   @override

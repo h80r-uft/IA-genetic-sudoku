@@ -2,10 +2,10 @@ import 'dart:math';
 
 class Gene {
   Gene() {
-    value = random.nextInt(9) + 1;
+    value = _random.nextInt(9) + 1;
   }
 
-  static var random = Random();
+  static final _random = Random();
   late final int value;
 
   @override
