@@ -16,7 +16,7 @@ class CellWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: cell.quadrant % 2 == 0 ? Colors.black12 : Colors.white,
+        color: cell.square % 2 == 0 ? Colors.black12 : Colors.white,
         border: Border(
           right: cord.contains(cell.position.x)
               ? const BorderSide(width: 2, color: Colors.pink)
