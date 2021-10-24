@@ -6,7 +6,7 @@ import 'package:genetic_sudoku/models/grid.dart';
 
 class Chromosome {
   Chromosome() {
-    genes = List.filled(81, Gene());
+    genes = List.generate(81, (i) => Gene());
     grid = Grid.fromChromosome(this);
   }
 
