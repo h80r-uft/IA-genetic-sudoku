@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:genetic_sudoku/algorithm/chromosome.dart';
+import 'package:genetic_sudoku/models/grid.dart';
 
 class Generation {
   Generation({required this.generationNumber, required int size}) {
@@ -59,4 +60,24 @@ class Generation {
 
   Chromosome get unfittest =>
       population.reduce((a, b) => a.fitness < b.fitness ? a : b);
+}
+
+class GenerationLog {
+  GenerationLog({
+    required this.fittest,
+    required this.unfittest,
+    required this.fitness,
+    required this.generationNumber,
+  });
+
+  GenerationLog.fromGeneration({required Generation generation})
+      : fittest = generation.fittest.grid,
+        unfittest = generation.unfittest.grid,
+        fitness = generation.fittest.fitness,
+        generationNumber = generation.generationNumber;
+
+  final Grid fittest;
+  final Grid unfittest;
+  final int fitness;
+  final int generationNumber;
 }
