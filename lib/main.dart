@@ -12,35 +12,42 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return const MaterialApp(
       title: 'Genetic Sudoku',
-      home: MyStatelessWidget(),
+      home: GeneticSudoku(),
     );
   }
 }
 
-class MyStatelessWidget extends StatelessWidget {
-  const MyStatelessWidget({Key? key}) : super(key: key);
+class GeneticSudoku extends StatefulWidget {
+  const GeneticSudoku({Key? key}) : super(key: key);
+
+  @override
+  State<GeneticSudoku> createState() => _GeneticSudokuState();
+}
+
+class _GeneticSudokuState extends State<GeneticSudoku> {
+  final solution = GeneticAlgorithm(
+    maxGenerations: 10000,
+    populationSize: 100,
+    mutationRate: 0.3,
+  );
+
+  @override
+  void initState() {
+    solution.initialize();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    final test = GeneticAlgorithm(
-      maxGenerations: 10000,
-      populationSize: 100,
-      mutationRate: 0.3,
-    );
-    test.initialize();
-    print('initial pop size: ${test.generations.last.population.length}');
-    while (!test.isFinished()) {
-      test.evolutionLoop();
-    }
-    print('final gen.: ${test.generations.last.generationNumber}');
-    print('final fit.: ${test.generations.last.fittest.fitness}');
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
         backgroundColor: Colors.green,
       ),
       body: Center(
-        child: GridWidget(grid: Grid()),
+        child: solution.generations.isEmpty
+            ? const CircularProgressIndicator()
+            : GridWidget(grid: solution.generations.last.fittest.grid),
       ),
     );
   }
