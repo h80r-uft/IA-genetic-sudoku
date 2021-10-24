@@ -47,7 +47,18 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
       body: Center(
         child: solution.generations.isEmpty
             ? const CircularProgressIndicator()
-            : GridWidget(grid: solution.generations.last.fittest.grid),
+            : Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  GridWidget(grid: solution.generations.last.fittest.grid),
+                  ElevatedButton(
+                    onPressed: () => setState(() {
+                      solution.evolutionLoop();
+                    }),
+                    child: const Text('Evolve'),
+                  )
+                ],
+              ),
       ),
     );
   }
