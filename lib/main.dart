@@ -26,6 +26,7 @@ class MyStatelessWidget extends StatelessWidget {
         title: const Text('Genetic Sudoku'),
         backgroundColor: Colors.green,
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: GridWidget(grid: Grid()),
       ),
