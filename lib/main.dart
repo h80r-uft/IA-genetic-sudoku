@@ -46,6 +46,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
         title: const Text('Genetic Sudoku'),
         backgroundColor: Colors.green,
       ),
+      backgroundColor: Colors.white,
       body: Center(
         child: solution.generationsLog.isEmpty
             ? const CircularProgressIndicator()
