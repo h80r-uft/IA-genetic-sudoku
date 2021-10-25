@@ -11,8 +11,8 @@ class CellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cord = [2, 5, 8];
-    final cord2 = [0, 3, 6];
+    final cord = [2, 5];
+    final cord2 = [3, 6];
 
     return Container(
       decoration: BoxDecoration(
