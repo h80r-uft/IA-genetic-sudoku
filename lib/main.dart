@@ -76,6 +76,21 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                               solution
                                   .generationsLog[selectedGeneration].fitness
                                   .toString()),
+                          Slider(
+                            min: 0,
+                            max: solution.generationsLog.length - 1,
+                            value: selectedGeneration.toDouble(),
+                            label: solution.generationsLog[selectedGeneration]
+                                .generationNumber
+                                .toString(),
+                            onChanged: isEvolving
+                                ? null
+                                : (selection) {
+                                    setState(() {
+                                      selectedGeneration = selection.round();
+                                    });
+                                  },
+                          ),
                         ],
                       );
                     },
