@@ -33,8 +33,36 @@ class CellWidget extends StatelessWidget {
         ),
       ),
       height: 500 / 9,
-      child: Center(
-        child: Text(cell.value.toString()),
+      child: Stack(
+        children: [
+          Text(
+            cell.copiesInRange.toString(),
+            style: const TextStyle(
+              color: Colors.red,
+              fontSize: 12,
+            ),
+          ),
+          Center(child: Text(cell.value.toString())),
+          Positioned(
+            right: 0,
+            child: Text(
+              cell.copiesInRange.toString(),
+              style: const TextStyle(
+                color: Colors.green,
+                fontSize: 12,
+              ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: Icon(
+              Icons.gesture_outlined,
+              size: 14,
+              color: Colors.grey.withOpacity(0.5),
+            ),
+          ),
+        ],
       ),
     );
   }
