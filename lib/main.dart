@@ -25,9 +25,9 @@ class GeneticSudoku extends StatefulWidget {
 
 class _GeneticSudokuState extends State<GeneticSudoku> {
   final solution = GeneticAlgorithm(
-    maxGenerations: 10000,
+    maxGenerations: 100000,
     populationSize: 100,
-    mutationRate: 0.05,
+    mutationRate: 0.025,
   );
 
   var selectedGeneration = 0;
@@ -56,9 +56,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                     stream: Stream.periodic(const Duration(milliseconds: 50)),
                     builder: (_, __) {
                       if (solution.isFinished()) {
-                        setState(() {
-                          isEvolving = false;
-                        });
+                        isEvolving = false;
                       } else if (isEvolving) {
                         solution.evolutionLoop();
                         selectedGeneration++;
