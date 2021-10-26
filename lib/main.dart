@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/theme/schema_colors.dart';
-import 'package:genetic_sudoku/widgets/chart_widget.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
 
@@ -27,66 +26,52 @@ class GeneticSudoku extends StatefulWidget {
 }
 
 class _GeneticSudokuState extends State<GeneticSudoku> {
-  /// Instância do algoritmo genético
-  ///
-  /// Configurada para executar até `100.000` gerações com uma população de
-  /// `100` cromossomos (sudokus), e uma taxa de mutação de `0.025`, ou seja,
-  /// `2.5%`. Utilizando um sudoku difícil, gerado pelo site
-  /// [sudoku.com](https://sudoku.com/pt/dificil/).
-  ///
-  /// A execução será encerrada antes de 100.000 gerações caso o sudoku seja
-  /// resolvido pelo algoritmo.
-  final solution = GeneticAlgorithm(
-    maxGenerations: 1000,
-    populationSize: 100,
-    mutationRate: 0.2,
-    reproductionRate: 0.4,
-    fixedCells: [
-      [7, 1],
-      [2, 4],
-      [1, 6],
-      [6, 9],
-      [3, 11],
-      [2, 18],
-      [3, 21],
-      [5, 24],
-      [3, 31],
-      [6, 34],
-      [6, 37],
-      [4, 38],
-      [7, 39],
-      [8, 43],
-      [5, 46],
-      [9, 49],
-      [4, 52],
-      [4, 55],
-      [7, 58],
-      [9, 60],
-      [2, 64],
-      [8, 68],
-      [5, 70],
-    ].map((e) => Cell(value: e[0], cellNumber: e[1], isFixed: true)).toList(),
-  );
-
-  /// O número da geração atualmente exibida na tela.
-  var selectedGeneration = 0;
-
-  /// Indica se o usuário ativou a evolução do algoritmo.
-  var isEvolving = false;
+  /// Lista de instâncias do algoritmo genético.
+  final alternatives = List.generate(
+      100,
+      (index) => GeneticAlgorithm(
+          maxGenerations: 1000,
+          populationSize: 100,
+          mutationRate: 0.2,
+          reproductionRate: 0.4,
+          fixedCells: [
+            [7, 1],
+            [2, 4],
+            [1, 6],
+            [6, 9],
+            [3, 11],
+            [2, 18],
+            [3, 21],
+            [5, 24],
+            [3, 31],
+            [6, 34],
+            [6, 37],
+            [4, 38],
+            [7, 39],
+            [8, 43],
+            [5, 46],
+            [9, 49],
+            [4, 52],
+            [4, 55],
+            [7, 58],
+            [9, 60],
+            [2, 64],
+            [8, 68],
+            [5, 70],
+          ]
+              .map((e) => Cell(value: e[0], cellNumber: e[1], isFixed: true))
+              .toList()));
 
   @override
   void initState() {
-    solution.initialize();
+    for (final solution in alternatives) {
+      solution.initialize();
+    }
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
-
-    final smallestSize = width < height ? width : height;
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
@@ -94,156 +79,34 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
       ),
       backgroundColor: scaffoldBackgroundColor,
       body: Center(
-        child: solution.generationsLog.isEmpty
-            ? const CircularProgressIndicator()
-            : Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  StreamBuilder(
-                    stream: Stream.periodic(const Duration(milliseconds: 1)),
-                    builder: (_, __) {
-                      if (solution.isFinished()) {
-                        isEvolving = false;
-                      } else if (isEvolving) {
-                        solution.evolutionLoop();
-                        selectedGeneration++;
-                      }
+        child: StreamBuilder(
+          stream: Stream.periodic(const Duration(milliseconds: 50)),
+          builder: (_, __) {
+            for (final solution in alternatives) {
+              if (!solution.isFinished()) {
+                solution.evolutionLoop();
+              }
+            }
 
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Card(
-                                elevation: 6,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: SizedBox(
-                                  width: smallestSize * 0.65,
-                                  height: smallestSize * 0.65,
-                                  child: Center(
-                                    child: GridWidget(
-                                        grid: solution
-                                            .generationsLog[selectedGeneration]
-                                            .fittest),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: smallestSize * 0.020,
-                              ),
-                              Card(
-                                color: primaryColor,
-                                elevation: 6,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: SizedBox(
-                                  width: smallestSize * 0.50,
-                                  height: smallestSize * 0.50,
-                                  child: Column(
-                                    children: <Widget>[
-                                      const SizedBox(height: 37),
-                                      const Text(
-                                        'Histórico evolutivo',
-                                        style: TextStyle(
-                                          fontSize: 30,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                      const SizedBox(height: 37),
-                                      Expanded(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            right: 20,
-                                            bottom: 5,
-                                          ),
-                                          child: ChartWidget(
-                                            generationsLog:
-                                                solution.generationsLog,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: smallestSize * 0.020,
-                          ),
-                          Card(
-                            elevation: 6,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
-                            ),
-                            child: SizedBox(
-                              height: smallestSize * 0.20,
-                              width: width * 0.65,
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text('Current generation: '
-                                      '${solution.generationsLog[selectedGeneration].generationNumber}'),
-                                  Text('Current fitness: ' +
-                                      solution
-                                          .generationsLog[selectedGeneration]
-                                          .fitness
-                                          .toString()),
-                                  Slider(
-                                    min: 0,
-                                    max: solution.generationsLog.length - 1,
-                                    value: selectedGeneration.toDouble(),
-                                    label: solution
-                                        .generationsLog[selectedGeneration]
-                                        .generationNumber
-                                        .toString(),
-                                    onChanged: isEvolving
-                                        ? null
-                                        : (selection) {
-                                            setState(() {
-                                              selectedGeneration =
-                                                  selection.round();
-                                            });
-                                          },
-                                    activeColor: primaryColor,
-                                    thumbColor: primaryColor,
-                                    inactiveColor: secondaryColor,
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: solution.isFinished()
-                                        ? null
-                                        : () => setState(() {
-                                              isEvolving = !isEvolving;
-                                              selectedGeneration = solution
-                                                  .generationsLog
-                                                  .last
-                                                  .generationNumber;
-                                            }),
-                                    child: Text(
-                                        isEvolving ? 'Evolving' : 'Evolve'),
-                                    style: ButtonStyle(
-                                      backgroundColor:
-                                          MaterialStateProperty.all(
-                                              primaryColor),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                ],
-              ),
+            final sortedAlgorithms = alternatives
+              ..sort((a, b) => a.generationsLog.last.fitness
+                  .compareTo(b.generationsLog.last.fitness));
+
+            final solution = sortedAlgorithms.last;
+
+            return Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GridWidget(grid: solution.generationsLog.last.fittest),
+                Text('Current generation: '
+                    '${solution.generationsLog.last.generationNumber}'),
+                Text('Current fitness: ' +
+                    solution.generationsLog.last.fitness.toString()),
+                Text('Mutation rate: ' + solution.mutationRate.toString()),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
