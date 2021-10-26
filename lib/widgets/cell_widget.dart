@@ -46,7 +46,7 @@ class CellWidget extends StatelessWidget {
           Positioned(
             right: 0,
             child: Text(
-              cell.copiesInRange.toString(),
+              cell.validShapes.toString(),
               style: const TextStyle(
                 color: Colors.green,
                 fontSize: 12,
