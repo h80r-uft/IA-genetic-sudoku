@@ -85,9 +85,9 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
-        backgroundColor: const Color(0xFF00003f),
+        backgroundColor: primaryColor,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: scaffoldBackgroundColor,
       body: Center(
         child: solution.generationsLog.isEmpty
             ? const CircularProgressIndicator()
@@ -131,6 +131,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                 borderRadius: BorderRadius.circular(25)),
                             child: SizedBox(
                               height: 130,
+                              width: 950,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
