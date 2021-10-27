@@ -14,8 +14,19 @@ class Chromosome {
   ///
   /// Gera aleatoriamente os genes deste cromossomo e armazena sua representação
   /// visual.
-  Chromosome() {
-    genes = List.generate(81, (i) => Gene());
+  ///
+  /// Caso sejam passadas células fixas, estas serão utilizadas para geração dos
+  /// genes.
+  Chromosome(List<Cell> fixedCells) {
+    genes = List.generate(81, (i) {
+      final fixedIndex = fixedCells.indexWhere(
+        (element) => element.cellNumber == i,
+      );
+
+      return fixedIndex == -1
+          ? Gene()
+          : Gene.fromCell(cell: fixedCells[fixedIndex]);
+    });
     grid = Grid.fromChromosome(this);
   }
 
@@ -109,11 +120,12 @@ class Chromosome {
 
   /// Realiza a mutação de genes do cromossomo.
   ///
-  /// Para cada gene no cromossomo, há uma chance [mutationRate] do gene sofrer
-  /// mutação. Neste caso, o gene é trocado por outro gene produzido de forma
-  /// aleatória.
+  /// Para cada gene no cromossomo, caso não seja um gene fixo, há uma chance
+  /// [mutationRate] do gene sofrer mutação. Neste caso, o gene é trocado por
+  /// outro gene produzido de forma aleatória.
   void _mutate({required double mutationRate}) {
     for (var i = 0; i < genes.length; i++) {
+      if (genes[i].isFixed) continue;
       if (Random().nextDouble() < mutationRate) {
         genes[i] = Gene();
       }

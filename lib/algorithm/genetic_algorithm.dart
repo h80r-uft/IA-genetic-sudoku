@@ -1,4 +1,5 @@
 import 'package:genetic_sudoku/algorithm/generation.dart';
+import 'package:genetic_sudoku/models/cell.dart';
 
 /// Algoritmo para solução do sudoku simulando evolução.
 ///
@@ -19,6 +20,7 @@ class GeneticAlgorithm {
     required this.maxGenerations,
     required this.populationSize,
     required this.mutationRate,
+    required this.fixedCells,
   });
 
   /// A quantidade máxima de gerações que o algoritmo pode gerar.
@@ -32,6 +34,9 @@ class GeneticAlgorithm {
 
   /// A chance de mutação do algoritmo.
   final double mutationRate;
+
+  /// Uma lista que armazena as células fixas de um sudoku difícil.
+  final List<Cell> fixedCells;
 
   /// Uma lista que armazena as gerações produzidas.
   ///
@@ -59,6 +64,7 @@ class GeneticAlgorithm {
     generations.add(Generation(
       generationNumber: 0,
       size: populationSize,
+      fixedCells: fixedCells,
     )..applyFitness());
 
     generationsLog.add(GenerationLog.fromGeneration(

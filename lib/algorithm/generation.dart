@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:genetic_sudoku/algorithm/chromosome.dart';
+import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 
 /// Representa uma geração do algoritmo.
@@ -12,8 +13,12 @@ class Generation {
   ///
   /// A geração criada possuirá uma população de tamanho [size] e será
   /// preenchida com cromossomos gerados aleatoriamente.
-  Generation({required this.generationNumber, required int size}) {
-    population = List.filled(size, Chromosome());
+  Generation({
+    required this.generationNumber,
+    required int size,
+    required List<Cell> fixedCells,
+  }) {
+    population = List.generate(size, (index) => Chromosome(fixedCells));
   }
 
   /// Reproduz a geração anterior para criar uma nova [Generation].
