@@ -120,11 +120,12 @@ class Chromosome {
 
   /// Realiza a mutação de genes do cromossomo.
   ///
-  /// Para cada gene no cromossomo, há uma chance [mutationRate] do gene sofrer
-  /// mutação. Neste caso, o gene é trocado por outro gene produzido de forma
-  /// aleatória.
+  /// Para cada gene no cromossomo, caso não seja um gene fixo, há uma chance
+  /// [mutationRate] do gene sofrer mutação. Neste caso, o gene é trocado por
+  /// outro gene produzido de forma aleatória.
   void _mutate({required double mutationRate}) {
     for (var i = 0; i < genes.length; i++) {
+      if (genes[i].isFixed) continue;
       if (Random().nextDouble() < mutationRate) {
         genes[i] = Gene();
       }

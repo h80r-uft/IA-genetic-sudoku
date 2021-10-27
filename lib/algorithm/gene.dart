@@ -10,12 +10,14 @@ import 'package:genetic_sudoku/models/cell.dart';
 /// * [_random] é um gerador de aleatoriedade.
 class Gene {
   /// Produz um gene aleatório.
-  Gene() {
+  Gene({this.isFixed = false}) {
     value = _random.nextInt(9) + 1;
   }
 
   /// Produz um gene a partir de uma célula fixa.
-  Gene.fromCell({required Cell cell}) : value = cell.value;
+  Gene.fromCell({required Cell cell})
+      : value = cell.value,
+        isFixed = cell.isFixed;
 
   /// É o gerador de aleatoriedade utilizado por todos os genes.
   static final _random = Random();
@@ -24,6 +26,9 @@ class Gene {
   ///
   /// Pode ser qualquer número no intervalo `[1 ... 9]`.
   late final int value;
+
+  /// Armazena se o gene atual é parte fixa do sudoku.
+  final bool isFixed;
 
   @override
   String toString() {

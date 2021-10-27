@@ -66,7 +66,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
       [7, 75],
       [6, 79],
       [3, 80],
-    ].map((e) => Cell(value: e[0], cellNumber: e[1])).toList(),
+    ].map((e) => Cell(value: e[0], cellNumber: e[1], isFixed: true)).toList(),
   );
 
   /// O número da geração atualmente exibida na tela.

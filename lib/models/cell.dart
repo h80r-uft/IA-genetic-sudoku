@@ -11,7 +11,11 @@ import 'dart:math';
 /// participa.
 class Cell {
   /// Gera uma nova célula com [value] e [cellNumber] informados.
-  Cell({required this.value, required this.cellNumber});
+  Cell({
+    required this.value,
+    required this.cellNumber,
+    this.isFixed = false,
+  });
 
   /// Armazena o valor atual da célula.
   ///
@@ -37,6 +41,9 @@ class Cell {
   /// Formas concluídas seriam linhas, colunas e quadrados em que não há
   /// repetição de valor.
   var validShapes = 0;
+
+  /// Armazena se a célula atual é fixa no sudoku.
+  final bool isFixed;
 
   /// Retorna em qual quadrado a célula se encontra.
   int get square => [
