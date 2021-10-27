@@ -32,7 +32,7 @@ class CellWidget extends StatelessWidget {
               : const BorderSide(color: Colors.transparent),
         ),
       ),
-      height: 500 / 9,
+      height: 400 / 9,
       child: Stack(
         children: [
           Text(

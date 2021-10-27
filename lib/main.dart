@@ -91,7 +91,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
         child: solution.generationsLog.isEmpty
             ? const CircularProgressIndicator()
             : Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   StreamBuilder(
                     stream: Stream.periodic(const Duration(milliseconds: 50)),
@@ -106,46 +106,80 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          GridWidget(
-                              grid: solution
-                                  .generationsLog[selectedGeneration].fittest),
-                          Text('Current generation: '
-                              '${solution.generationsLog[selectedGeneration].generationNumber}'),
-                          Text('Current fitness: ' +
-                              solution
-                                  .generationsLog[selectedGeneration].fitness
-                                  .toString()),
-                          Slider(
-                            min: 0,
-                            max: solution.generationsLog.length - 1,
-                            value: selectedGeneration.toDouble(),
-                            label: solution.generationsLog[selectedGeneration]
-                                .generationNumber
-                                .toString(),
-                            onChanged: isEvolving
-                                ? null
-                                : (selection) {
-                                    setState(() {
-                                      selectedGeneration = selection.round();
-                                    });
-                                  },
-                            activeColor: const Color(0xFF00003f),
-                            thumbColor: const Color(0xFF00003f),
+                          Card(
+                            elevation: 6,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: SizedBox(
+                              width: 450,
+                              height: 450,
+                              child: Center(
+                                child: GridWidget(
+                                    grid: solution
+                                        .generationsLog[selectedGeneration]
+                                        .fittest),
+                              ),
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          Card(
+                            elevation: 6,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: SizedBox(
+                              height: 130,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Current generation: '
+                                      '${solution.generationsLog[selectedGeneration].generationNumber}'),
+                                  Text('Current fitness: ' +
+                                      solution
+                                          .generationsLog[selectedGeneration]
+                                          .fitness
+                                          .toString()),
+                                  Slider(
+                                    min: 0,
+                                    max: solution.generationsLog.length - 1,
+                                    value: selectedGeneration.toDouble(),
+                                    label: solution
+                                        .generationsLog[selectedGeneration]
+                                        .generationNumber
+                                        .toString(),
+                                    onChanged: isEvolving
+                                        ? null
+                                        : (selection) {
+                                            setState(() {
+                                              selectedGeneration =
+                                                  selection.round();
+                                            });
+                                          },
+                                    activeColor: const Color(0xFF00003f),
+                                    thumbColor: const Color(0xFF00003f),
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: solution.isFinished()
+                                        ? null
+                                        : () => setState(() {
+                                              isEvolving = !isEvolving;
+                                              selectedGeneration = solution
+                                                  .generationsLog
+                                                  .last
+                                                  .generationNumber;
+                                            }),
+                                    child: Text(
+                                        isEvolving ? 'Evolving' : 'Evolve'),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       );
                     },
                   ),
-                  ElevatedButton(
-                    onPressed: solution.isFinished()
-                        ? null
-                        : () => setState(() {
-                              isEvolving = !isEvolving;
-                              selectedGeneration =
-                                  solution.generationsLog.last.generationNumber;
-                            }),
-                    child: Text(isEvolving ? 'Evolving' : 'Evolve'),
-                  )
                 ],
               ),
       ),

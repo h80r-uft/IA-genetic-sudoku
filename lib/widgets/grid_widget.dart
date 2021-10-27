@@ -15,7 +15,7 @@ class GridWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 500,
+      width: 400,
       child: Table(
         border: TableBorder.symmetric(
           inside: const BorderSide(color: Color(0xFF00003f)),
