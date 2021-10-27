@@ -4,12 +4,28 @@ import 'package:genetic_sudoku/algorithm/gene.dart';
 import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 
+/// Represenda um cromossomo no algoritmo.
+///
+/// * [genes] é a lista de genes deste cromossomo.
+/// * [grid] é a representação visual do cromossomo no aplicativo.
+/// * [fitness] é a pontuação deste cromossomo.
 class Chromosome {
+  /// Cria um cromossomo aleatório.
+  ///
+  /// Gera aleatoriamente os genes deste cromossomo e armazena sua representação
+  /// visual.
   Chromosome() {
     genes = List.generate(81, (i) => Gene());
     grid = Grid.fromChromosome(this);
   }
 
+  /// Gera um novo cromossomo por reprodução de dois pais.
+  ///
+  /// Utiliza reprodução com um único ponto de cruzamento, [crossingPoint],
+  /// definido aleatoriamente.
+  ///
+  /// Utiliza a [mutationRate] para definir a chance de mutação de cada gene no
+  /// cromossomo.
   Chromosome.fromParents(
     Chromosome parent1,
     Chromosome parent2, {
@@ -25,10 +41,36 @@ class Chromosome {
     grid = Grid.fromChromosome(this);
   }
 
+  /// Armazena a lista de genes deste cromossomo.
+  ///
+  /// Cada gene pode ser compreendido como uma célula do sudoku.
   late final List<Gene> genes;
+
+  /// Armazena a representação visual deste cromossomo no aplicativo.
   late final Grid grid;
+
+  /// Armazena a pontuação do cromossomo atual.
   late int fitness;
 
+  /// Calcula a pontuação do cromossomo.
+  ///
+  /// Realiza o cálculo do [fitness] computando a pontuação de cada gene e
+  /// somando suas pontuações para atingir o resultado final.
+  ///
+  /// A pontuação de cada gene é definida como a subtração do exponencial de
+  /// base três do número de formas que determinado gene soluciona (linha,
+  /// coluna e quadrado) pelo exponencial de base dois do número de repetições
+  /// do valor do gene em cada forma.
+  ///
+  /// ```dart
+  /// pow(3, formasSolucionadas) - pow(2, copiasNoAlcance)
+  /// ```
+  ///
+  /// O pior resultado possível, em que todas as células do sudoku tem o mesmo
+  /// valor, é `-33.554.431`.
+  ///
+  /// O melhor resultado possível, em que o sudoku foi solucionado com sucesso,
+  /// é `2025`.
   void applyFitness() {
     void evaluateCell({
       required Cell target,
@@ -65,6 +107,11 @@ class Chromosome {
     fitness = fitnessPerGene.reduce((a, b) => a + b);
   }
 
+  /// Realiza a mutação de genes do cromossomo.
+  ///
+  /// Para cada gene no cromossomo, há uma chance [mutationRate] do gene sofrer
+  /// mutação. Neste caso, o gene é trocado por outro gene produzido de forma
+  /// aleatória.
   void _mutate({required double mutationRate}) {
     for (var i = 0; i < genes.length; i++) {
       if (Random().nextDouble() < mutationRate) {
