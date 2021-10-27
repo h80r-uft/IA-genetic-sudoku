@@ -86,7 +86,6 @@ class GeneticAlgorithm {
       previous: generations.last,
       mutationRate: mutationRate,
     ));
-    generations.last.applyFitness();
 
     memoryHandler();
   }
