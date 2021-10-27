@@ -43,15 +43,6 @@ class CellWidget extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Icon(
-              cell.isFixed ? Icons.lock : Icons.gesture_outlined,
-              size: 14,
-              color: Colors.grey.withOpacity(0.5),
-            ),
-          ),
         ],
       ),
     );
