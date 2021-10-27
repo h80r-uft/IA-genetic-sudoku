@@ -1,5 +1,7 @@
 import 'dart:math';
 
+import 'package:genetic_sudoku/models/cell.dart';
+
 /// Representa um gene do cromossomo.
 ///
 /// O gene pode ser observado como cada célula do sudoku.
@@ -11,6 +13,9 @@ class Gene {
   Gene() {
     value = _random.nextInt(9) + 1;
   }
+
+  /// Produz um gene a partir de uma célula fixa.
+  Gene.fromCell({required Cell cell}) : value = cell.value;
 
   /// É o gerador de aleatoriedade utilizado por todos os genes.
   static final _random = Random();

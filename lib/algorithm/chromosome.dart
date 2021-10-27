@@ -14,8 +14,19 @@ class Chromosome {
   ///
   /// Gera aleatoriamente os genes deste cromossomo e armazena sua representação
   /// visual.
-  Chromosome() {
-    genes = List.generate(81, (i) => Gene());
+  ///
+  /// Caso sejam passadas células fixas, estas serão utilizadas para geração dos
+  /// genes.
+  Chromosome(List<Cell> fixedCells) {
+    genes = List.generate(81, (i) {
+      final fixedIndex = fixedCells.indexWhere(
+        (element) => element.cellNumber == i,
+      );
+
+      return fixedIndex == -1
+          ? Gene()
+          : Gene.fromCell(cell: fixedCells[fixedIndex]);
+    });
     grid = Grid.fromChromosome(this);
   }
 

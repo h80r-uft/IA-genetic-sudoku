@@ -15,7 +15,7 @@ class Grid {
       81,
       (i) => Cell(
         value: i,
-        position: Point(i % 9, i ~/ 9),
+        cellNumber: i,
       ),
     );
   }
@@ -26,7 +26,7 @@ class Grid {
       81,
       (i) => Cell(
         value: chromosome.genes[i].value,
-        position: Point(i % 9, i ~/ 9),
+        cellNumber: i,
       ),
     );
   }
