@@ -24,13 +24,24 @@ class GeneticSudoku extends StatefulWidget {
 }
 
 class _GeneticSudokuState extends State<GeneticSudoku> {
+  /// Instância do algoritmo genético
+  ///
+  /// Configurada para executar até `100.000` gerações com uma população de
+  /// `100` cromossomos (sudokus), e uma taxa de mutação de `0.025`, ou seja,
+  /// `2.5%`.
+  ///
+  /// A execução será encerrada antes de 100.000 gerações caso o sudoku seja
+  /// resolvido pelo algoritmo.
   final solution = GeneticAlgorithm(
     maxGenerations: 100000,
     populationSize: 100,
     mutationRate: 0.025,
   );
 
+  /// O número da geração atualmente exibida na tela.
   var selectedGeneration = 0;
+
+  /// Indica se o usuário ativou a evolução do algoritmo.
   var isEvolving = false;
 
   @override
