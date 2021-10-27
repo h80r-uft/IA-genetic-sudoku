@@ -16,19 +16,19 @@ class CellWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: cell.square % 2 == 0 ? Colors.black12 : Colors.white,
+        color: cell.isFixed ? Colors.blue[50] : Colors.white,
         border: Border(
           right: cord.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Colors.pink)
+              ? const BorderSide(width: 2, color: Color(0xFF00003f))
               : const BorderSide(color: Colors.transparent),
           bottom: cord.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Colors.pink)
+              ? const BorderSide(width: 2, color: Color(0xFF00003f))
               : const BorderSide(color: Colors.transparent),
           left: cord2.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Colors.pink)
+              ? const BorderSide(width: 2, color: Color(0xFF00003f))
               : const BorderSide(color: Colors.transparent),
           top: cord2.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Colors.pink)
+              ? const BorderSide(width: 2, color: Color(0xFF00003f))
               : const BorderSide(color: Colors.transparent),
         ),
       ),

@@ -18,7 +18,7 @@ class GridWidget extends StatelessWidget {
       width: 500,
       child: Table(
         border: TableBorder.symmetric(
-          inside: const BorderSide(color: Colors.pink),
+          inside: const BorderSide(color: Color(0xFF00003f)),
         ),
         children: List.generate(
           9,

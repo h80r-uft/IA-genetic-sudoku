@@ -84,7 +84,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
-        backgroundColor: Colors.green,
+        backgroundColor: const Color(0xFF00003f),
       ),
       backgroundColor: Colors.white,
       body: Center(
@@ -129,6 +129,8 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                       selectedGeneration = selection.round();
                                     });
                                   },
+                            activeColor: const Color(0xFF00003f),
+                            thumbColor: const Color(0xFF00003f),
                           ),
                         ],
                       );
