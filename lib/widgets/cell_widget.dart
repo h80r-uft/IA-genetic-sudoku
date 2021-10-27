@@ -12,25 +12,14 @@ class CellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cord = [2, 5];
-    final cord2 = [3, 6];
-
     return Container(
       decoration: BoxDecoration(
         color: cell.isFixed ? secondaryColor : Colors.white,
         border: Border(
-          right: cord.contains(cell.position.x)
-              ? BorderSide(width: 2, color: primaryColor)
-              : const BorderSide(color: Colors.transparent),
-          bottom: cord.contains(cell.position.y)
-              ? BorderSide(width: 2, color: primaryColor)
-              : const BorderSide(color: Colors.transparent),
-          left: cord2.contains(cell.position.x)
-              ? BorderSide(width: 2, color: primaryColor)
-              : const BorderSide(color: Colors.transparent),
-          top: cord2.contains(cell.position.y)
-              ? BorderSide(width: 2, color: primaryColor)
-              : const BorderSide(color: Colors.transparent),
+          left: customSide(targetPos: cell.position.x, isAfter: true),
+          top: customSide(targetPos: cell.position.y, isAfter: true),
+          right: customSide(targetPos: cell.position.x),
+          bottom: customSide(targetPos: cell.position.y),
         ),
       ),
       height: 400 / 9,
@@ -65,6 +54,16 @@ class CellWidget extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+
+  BorderSide customSide({required num targetPos, bool isAfter = false}) {
+    if (isAfter) targetPos--;
+    final isBold = targetPos == 2 || targetPos == 5;
+
+    return BorderSide(
+      width: 2,
+      color: isBold ? primaryColor : Colors.transparent,
     );
   }
 }

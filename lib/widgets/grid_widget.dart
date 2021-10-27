@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/assets/shema_colors.dart';
 import 'package:genetic_sudoku/models/grid.dart';
 import 'package:genetic_sudoku/widgets/cell_widget.dart';
 
@@ -18,7 +19,7 @@ class GridWidget extends StatelessWidget {
       width: 400,
       child: Table(
         border: TableBorder.symmetric(
-          inside: const BorderSide(color: Color(0xFF00003f)),
+          inside: BorderSide(color: primaryColor),
         ),
         children: List.generate(
           9,
