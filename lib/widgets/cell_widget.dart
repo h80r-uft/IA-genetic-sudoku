@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/assets/shema_colors.dart';
 import 'package:genetic_sudoku/models/cell.dart';
 
 class CellWidget extends StatelessWidget {
@@ -16,19 +17,19 @@ class CellWidget extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        color: cell.isFixed ? Colors.blue[50] : Colors.white,
+        color: cell.isFixed ? secondaryColor : Colors.white,
         border: Border(
           right: cord.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Color(0xFF00003f))
+              ? BorderSide(width: 2, color: primaryColor)
               : const BorderSide(color: Colors.transparent),
           bottom: cord.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Color(0xFF00003f))
+              ? BorderSide(width: 2, color: primaryColor)
               : const BorderSide(color: Colors.transparent),
           left: cord2.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Color(0xFF00003f))
+              ? BorderSide(width: 2, color: primaryColor)
               : const BorderSide(color: Colors.transparent),
           top: cord2.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Color(0xFF00003f))
+              ? BorderSide(width: 2, color: primaryColor)
               : const BorderSide(color: Colors.transparent),
         ),
       ),

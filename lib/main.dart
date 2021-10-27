@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/assets/shema_colors.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
 import 'package:genetic_sudoku/models/cell.dart';
@@ -156,8 +157,9 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                                   selection.round();
                                             });
                                           },
-                                    activeColor: const Color(0xFF00003f),
-                                    thumbColor: const Color(0xFF00003f),
+                                    activeColor: primaryColor,
+                                    thumbColor: primaryColor,
+                                    inactiveColor: secondaryColor,
                                   ),
                                   ElevatedButton(
                                     onPressed: solution.isFinished()
@@ -171,6 +173,11 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                             }),
                                     child: Text(
                                         isEvolving ? 'Evolving' : 'Evolve'),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              primaryColor),
+                                    ),
                                   )
                                 ],
                               ),
