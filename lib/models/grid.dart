@@ -27,6 +27,7 @@ class Grid {
       (i) => Cell(
         value: chromosome.genes[i].value,
         cellNumber: i,
+        isFixed: chromosome.genes[i].isFixed,
       ),
     );
   }

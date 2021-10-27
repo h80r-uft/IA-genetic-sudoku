@@ -57,7 +57,7 @@ class CellWidget extends StatelessWidget {
             bottom: 0,
             right: 0,
             child: Icon(
-              Icons.gesture_outlined,
+              cell.isFixed ? Icons.lock : Icons.gesture_outlined,
               size: 14,
               color: Colors.grey.withOpacity(0.5),
             ),

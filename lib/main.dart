@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
