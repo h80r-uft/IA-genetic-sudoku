@@ -106,19 +106,18 @@ class Chromosome {
     // final genes1 = parent1.genes.sublist(0, crossingPoint);
     // final genes2 = parent2.genes.sublist(crossingPoint);
     // genes = List.from(genes1)..addAll(genes2);
+    grid = Grid.fromChromosome(this);
 
     _mutate(mutationRate: mutationRate);
-
-    grid = Grid.fromChromosome(this);
   }
 
   /// Armazena a lista de genes deste cromossomo.
   ///
   /// Cada gene pode ser compreendido como uma célula do sudoku.
-  late final List<Gene> genes;
+  late List<Gene> genes;
 
   /// Armazena a representação visual deste cromossomo no aplicativo.
-  late final Grid grid;
+  late Grid grid;
 
   /// Armazena a pontuação do cromossomo atual.
   late int fitness;
@@ -184,12 +183,40 @@ class Chromosome {
   /// [mutationRate] do gene sofrer mutação. Neste caso, o gene é trocado por
   /// outro gene produzido de forma aleatória.
   void _mutate({required double mutationRate}) {
-    for (var i = 0; i < genes.length; i++) {
-      if (genes[i].isFixed) continue;
-      if (Random().nextDouble() < mutationRate) {
-        genes[i] = Gene();
+    final random = Random();
+    final squares = List.generate(
+      9,
+      (i) => grid.cells.where((e) => e.square == i + 1).toList(),
+    );
+
+    for (final square in squares) {
+      if (random.nextDouble() > mutationRate) continue;
+      var cell1 = random.nextInt(9);
+      while (square[cell1].isFixed) {
+        cell1 = random.nextInt(9);
+      }
+
+      var cell2 = random.nextInt(9);
+      while (square[cell2].isFixed || cell1 == cell2) {
+        cell2 = random.nextInt(9);
+      }
+
+      final auxiliarCell = square[cell1];
+      square[cell1] = square[cell2];
+      square[cell2] = auxiliarCell;
+    }
+
+    genes = [];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          genes.add(Gene.fromCell(cell: squares[(i ~/ 3) * 3 + j].removeAt(0)));
+        }
       }
     }
+
+    grid = Grid.fromChromosome(this);
   }
 
   @override

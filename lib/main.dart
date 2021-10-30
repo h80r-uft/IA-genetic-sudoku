@@ -38,7 +38,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
   final solution = GeneticAlgorithm(
     maxGenerations: 1000000,
     populationSize: 50,
-    mutationRate: 0,
+    mutationRate: 0.2,
     fixedCells: [
       [7, 2],
       [3, 6],
@@ -100,7 +100,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   StreamBuilder(
-                    stream: Stream.periodic(const Duration(seconds: 10)),
+                    stream: Stream.periodic(const Duration(milliseconds: 1)),
                     builder: (_, __) {
                       if (solution.isFinished()) {
                         isEvolving = false;
