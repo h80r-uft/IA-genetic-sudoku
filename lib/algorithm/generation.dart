@@ -30,29 +30,30 @@ class Generation {
     required Generation previous,
     required double mutationRate,
   }) {
-    final parents = List.generate(
-      previous.population.length - 2,
-      (index) => previous.getParent(),
-    );
     final elitism = previous.fittest;
-    final variability = previous.unfittest;
 
-    population = [elitism, variability];
+    population = [elitism];
 
-    for (var i = 0; i < parents.length; i += 2) {
+    while (population.length < previous.population.length) {
       final crossingPoint = Random().nextInt(81);
-      population.add(Chromosome.fromParents(
-        parents[i],
-        parents[i + 1],
+      final parent1 = previous.getParent();
+      final parent2 = previous.getParent(avoid: parent1);
+
+      final child1 = Chromosome.fromParents(
+        parent1,
+        parent2,
         crossingPoint: crossingPoint,
         mutationRate: mutationRate,
-      ));
-      population.add(Chromosome.fromParents(
-        parents[i + 1],
-        parents[i],
+      )..applyFitness();
+
+      final child2 = Chromosome.fromParents(
+        parent2,
+        parent1,
         crossingPoint: crossingPoint,
         mutationRate: mutationRate,
-      ));
+      )..applyFitness();
+
+      population.add(child1.fitness < child2.fitness ? child1 : child2);
     }
   }
 
@@ -79,20 +80,23 @@ class Generation {
   /// O [tournamentSize] determina o percentual da população que será escolhido
   /// aleatoriamente para participar do torneio.
   /// Deste grupo, apenas o melhor será escolhido como pai válido.
-  Chromosome getParent({double tournamentSize = 0.1}) {
-    final pool = population
+  ///
+  /// O [avoid] é opcional e indica um cromossomo que não deve ser escolhido.
+  Chromosome getParent({double tournamentSize = 0.1, Chromosome? avoid}) {
+    final pool = List.of(population)
+      ..remove(avoid)
       ..shuffle()
       ..take((tournamentSize * population.length).round());
-    return pool.reduce((best, e) => e.fitness > best.fitness ? e : best);
+    return pool.reduce((best, e) => e.fitness < best.fitness ? e : best);
   }
 
   /// Retorna o melhor cromossomo da geração.
   Chromosome get fittest =>
-      population.reduce((a, b) => a.fitness > b.fitness ? a : b);
+      population.reduce((a, b) => a.fitness < b.fitness ? a : b);
 
   /// Retorna o pior cromossomo da geração.
   Chromosome get unfittest =>
-      population.reduce((a, b) => a.fitness < b.fitness ? a : b);
+      population.reduce((a, b) => a.fitness > b.fitness ? a : b);
 }
 
 /// Uma representação simplificada de [Generation].

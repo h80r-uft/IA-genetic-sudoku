@@ -36,9 +36,9 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
   /// A execução será encerrada antes de 100.000 gerações caso o sudoku seja
   /// resolvido pelo algoritmo.
   final solution = GeneticAlgorithm(
-    maxGenerations: 100000,
-    populationSize: 100,
-    mutationRate: 0.025,
+    maxGenerations: 1000000,
+    populationSize: 50,
+    mutationRate: 0.1,
     fixedCells: [
       [7, 2],
       [3, 6],
@@ -100,7 +100,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   StreamBuilder(
-                    stream: Stream.periodic(const Duration(milliseconds: 50)),
+                    stream: Stream.periodic(const Duration(milliseconds: 1)),
                     builder: (_, __) {
                       if (solution.isFinished()) {
                         isEvolving = false;
