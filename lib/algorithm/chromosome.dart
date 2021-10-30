@@ -191,19 +191,44 @@ class Chromosome {
 
     for (final square in squares) {
       if (random.nextDouble() > mutationRate) continue;
-      var cell1 = random.nextInt(9);
-      while (square[cell1].isFixed) {
-        cell1 = random.nextInt(9);
-      }
+      switch (random.nextInt(2)) {
+        case 0:
+          var cell1 = random.nextInt(9);
+          while (square[cell1].isFixed) {
+            cell1 = random.nextInt(9);
+          }
 
-      var cell2 = random.nextInt(9);
-      while (square[cell2].isFixed || cell1 == cell2) {
-        cell2 = random.nextInt(9);
-      }
+          var cell2 = random.nextInt(9);
+          while (square[cell2].isFixed || cell1 == cell2) {
+            cell2 = random.nextInt(9);
+          }
 
-      final auxiliarCell = square[cell1];
-      square[cell1] = square[cell2];
-      square[cell2] = auxiliarCell;
+          final auxiliarCell = square[cell1];
+          square[cell1] = square[cell2];
+          square[cell2] = auxiliarCell;
+          break;
+        case 1:
+          var cell1 = random.nextInt(9);
+          while (square[cell1].isFixed) {
+            cell1 = random.nextInt(9);
+          }
+
+          var cell2 = random.nextInt(9);
+          while (square[cell2].isFixed || cell1 == cell2) {
+            cell2 = random.nextInt(9);
+          }
+
+          var cell3 = random.nextInt(9);
+          while (square[cell3].isFixed || cell1 == cell3 || cell2 == cell3) {
+            cell3 = random.nextInt(9);
+          }
+
+          final auxiliarCell = square[cell1];
+          square[cell1] = square[cell2];
+          square[cell2] = square[cell3];
+          square[cell3] = auxiliarCell;
+          break;
+      }
     }
 
     genes = [];
