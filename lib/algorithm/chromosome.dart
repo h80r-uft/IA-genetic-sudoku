@@ -71,9 +71,41 @@ class Chromosome {
     required int crossingPoint,
     required double mutationRate,
   }) {
-    final genes1 = parent1.genes.sublist(0, crossingPoint);
-    final genes2 = parent2.genes.sublist(crossingPoint);
-    genes = List.from(genes1)..addAll(genes2);
+    final selectedSquares1 = List.generate(
+      crossingPoint + 1,
+      (i) => parent1.grid.cells
+          .where(
+            (e) => e.square == i + 1,
+          )
+          .toList(),
+    );
+
+    final selectedSquares2 = List.generate(
+      8 - crossingPoint,
+      (i) => parent2.grid.cells
+          .where(
+            (e) => e.square == crossingPoint + 2 + i,
+          )
+          .toList(),
+    );
+
+    final allSquares = List<List<Cell>>.from(selectedSquares1)
+      ..addAll(selectedSquares2);
+
+    genes = [];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          genes.add(
+              Gene.fromCell(cell: allSquares[(i ~/ 3) * 3 + j].removeAt(0)));
+        }
+      }
+    }
+
+    // final genes1 = parent1.genes.sublist(0, crossingPoint);
+    // final genes2 = parent2.genes.sublist(crossingPoint);
+    // genes = List.from(genes1)..addAll(genes2);
 
     _mutate(mutationRate: mutationRate);
 

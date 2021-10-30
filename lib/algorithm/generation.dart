@@ -35,7 +35,7 @@ class Generation {
     population = [elitism];
 
     while (population.length < previous.population.length) {
-      final crossingPoint = Random().nextInt(81);
+      final crossingPoint = Random().nextInt(8);
       final parent1 = previous.getParent();
       final parent2 = previous.getParent(avoid: parent1);
 
