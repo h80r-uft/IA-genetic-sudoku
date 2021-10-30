@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/cell.dart';
+import 'package:genetic_sudoku/theme/schema_colors.dart';
 
 class CellWidget extends StatelessWidget {
   const CellWidget({
@@ -11,28 +12,22 @@ class CellWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cord = [2, 5, 8];
-    final cord2 = [0, 3, 6];
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final smallestSize = width < height ? width : height;
 
     return Container(
       decoration: BoxDecoration(
-        color: cell.square % 2 == 0 ? Colors.black12 : Colors.white,
+        color: cell.isFixed ? secondaryColor : Colors.white,
         border: Border(
-          right: cord.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Colors.pink)
-              : const BorderSide(color: Colors.transparent),
-          bottom: cord.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Colors.pink)
-              : const BorderSide(color: Colors.transparent),
-          left: cord2.contains(cell.position.x)
-              ? const BorderSide(width: 2, color: Colors.pink)
-              : const BorderSide(color: Colors.transparent),
-          top: cord2.contains(cell.position.y)
-              ? const BorderSide(width: 2, color: Colors.pink)
-              : const BorderSide(color: Colors.transparent),
+          left: customSide(targetPos: cell.position.x, isAfter: true),
+          top: customSide(targetPos: cell.position.y, isAfter: true),
+          right: customSide(targetPos: cell.position.x),
+          bottom: customSide(targetPos: cell.position.y),
         ),
       ),
-      height: 500 / 9,
+      height: (smallestSize * 0.60) / 9,
       child: Stack(
         children: [
           Text(
@@ -53,17 +48,18 @@ class CellWidget extends StatelessWidget {
               ),
             ),
           ),
-          Positioned(
-            bottom: 0,
-            right: 0,
-            child: Icon(
-              cell.isFixed ? Icons.lock : Icons.gesture_outlined,
-              size: 14,
-              color: Colors.grey.withOpacity(0.5),
-            ),
-          ),
         ],
       ),
+    );
+  }
+
+  BorderSide customSide({required num targetPos, bool isAfter = false}) {
+    if (isAfter) targetPos--;
+    final isBold = targetPos == 2 || targetPos == 5;
+
+    return BorderSide(
+      width: 2,
+      color: isBold ? primaryColor : Colors.transparent,
     );
   }
 }

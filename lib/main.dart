@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/models/cell.dart';
+import 'package:genetic_sudoku/theme/schema_colors.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
-import 'package:genetic_sudoku/models/cell.dart';
 
 void main() => runApp(const MyApp());
 
@@ -81,16 +82,22 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final smallestSize = width < height ? width : height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
-        backgroundColor: Colors.green,
+        backgroundColor: primaryColor,
       ),
+      backgroundColor: scaffoldBackgroundColor,
       body: Center(
         child: solution.generationsLog.isEmpty
             ? const CircularProgressIndicator()
             : Column(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   StreamBuilder(
                     stream: Stream.periodic(const Duration(milliseconds: 50)),
@@ -105,44 +112,87 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          GridWidget(
-                              grid: solution
-                                  .generationsLog[selectedGeneration].fittest),
-                          Text('Current generation: '
-                              '${solution.generationsLog[selectedGeneration].generationNumber}'),
-                          Text('Current fitness: ' +
-                              solution
-                                  .generationsLog[selectedGeneration].fitness
-                                  .toString()),
-                          Slider(
-                            min: 0,
-                            max: solution.generationsLog.length - 1,
-                            value: selectedGeneration.toDouble(),
-                            label: solution.generationsLog[selectedGeneration]
-                                .generationNumber
-                                .toString(),
-                            onChanged: isEvolving
-                                ? null
-                                : (selection) {
-                                    setState(() {
-                                      selectedGeneration = selection.round();
-                                    });
-                                  },
+                          Card(
+                            elevation: 6,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: SizedBox(
+                              width: smallestSize * 0.65,
+                              height: smallestSize * 0.65,
+                              child: Center(
+                                child: GridWidget(
+                                    grid: solution
+                                        .generationsLog[selectedGeneration]
+                                        .fittest),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            height: smallestSize * 0.020,
+                          ),
+                          Card(
+                            elevation: 6,
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25)),
+                            child: SizedBox(
+                              height: smallestSize * 0.20,
+                              width: width * 0.65,
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text('Current generation: '
+                                      '${solution.generationsLog[selectedGeneration].generationNumber}'),
+                                  Text('Current fitness: ' +
+                                      solution
+                                          .generationsLog[selectedGeneration]
+                                          .fitness
+                                          .toString()),
+                                  Slider(
+                                    min: 0,
+                                    max: solution.generationsLog.length - 1,
+                                    value: selectedGeneration.toDouble(),
+                                    label: solution
+                                        .generationsLog[selectedGeneration]
+                                        .generationNumber
+                                        .toString(),
+                                    onChanged: isEvolving
+                                        ? null
+                                        : (selection) {
+                                            setState(() {
+                                              selectedGeneration =
+                                                  selection.round();
+                                            });
+                                          },
+                                    activeColor: primaryColor,
+                                    thumbColor: primaryColor,
+                                    inactiveColor: secondaryColor,
+                                  ),
+                                  ElevatedButton(
+                                    onPressed: solution.isFinished()
+                                        ? null
+                                        : () => setState(() {
+                                              isEvolving = !isEvolving;
+                                              selectedGeneration = solution
+                                                  .generationsLog
+                                                  .last
+                                                  .generationNumber;
+                                            }),
+                                    child: Text(
+                                        isEvolving ? 'Evolving' : 'Evolve'),
+                                    style: ButtonStyle(
+                                      backgroundColor:
+                                          MaterialStateProperty.all(
+                                              primaryColor),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       );
                     },
                   ),
-                  ElevatedButton(
-                    onPressed: solution.isFinished()
-                        ? null
-                        : () => setState(() {
-                              isEvolving = !isEvolving;
-                              selectedGeneration =
-                                  solution.generationsLog.last.generationNumber;
-                            }),
-                    child: Text(isEvolving ? 'Evolving' : 'Evolve'),
-                  )
                 ],
               ),
       ),

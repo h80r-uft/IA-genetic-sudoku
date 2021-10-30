@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/grid.dart';
+import 'package:genetic_sudoku/theme/schema_colors.dart';
 import 'package:genetic_sudoku/widgets/cell_widget.dart';
 
 class GridWidget extends StatelessWidget {
@@ -14,12 +15,16 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final smallestSize = width < height ? width : height;
+
     return SizedBox(
-      width: 500,
+      width: smallestSize * 0.60,
       child: Table(
-        border: TableBorder.all(
-          color: Colors.pink,
-          width: 2,
+        border: TableBorder.symmetric(
+          inside: BorderSide(color: primaryColor),
         ),
         children: List.generate(
           9,
