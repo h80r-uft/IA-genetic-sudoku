@@ -53,7 +53,7 @@ class Generation {
         mutationRate: mutationRate,
       )..applyFitness();
 
-      population.add(child1.fitness > child2.fitness ? child1 : child2);
+      population.add(child1.fitness < child2.fitness ? child1 : child2);
     }
   }
 
@@ -87,16 +87,16 @@ class Generation {
       ..remove(avoid)
       ..shuffle()
       ..take((tournamentSize * population.length).round());
-    return pool.reduce((best, e) => e.fitness > best.fitness ? e : best);
+    return pool.reduce((best, e) => e.fitness < best.fitness ? e : best);
   }
 
   /// Retorna o melhor cromossomo da geração.
   Chromosome get fittest =>
-      population.reduce((a, b) => a.fitness > b.fitness ? a : b);
+      population.reduce((a, b) => a.fitness < b.fitness ? a : b);
 
   /// Retorna o pior cromossomo da geração.
   Chromosome get unfittest =>
-      population.reduce((a, b) => a.fitness < b.fitness ? a : b);
+      population.reduce((a, b) => a.fitness > b.fitness ? a : b);
 }
 
 /// Uma representação simplificada de [Generation].

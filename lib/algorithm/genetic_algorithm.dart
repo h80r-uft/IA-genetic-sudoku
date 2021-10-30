@@ -109,7 +109,7 @@ class GeneticAlgorithm {
   bool isFinished() {
     final lastGen = generations.last;
     final reachedMaxGenerations = lastGen.generationNumber >= maxGenerations;
-    final reachedRequiredFitness = lastGen.fittest.fitness >= 2025;
+    final reachedRequiredFitness = lastGen.fittest.fitness == 0;
 
     return reachedMaxGenerations || reachedRequiredFitness;
   }
