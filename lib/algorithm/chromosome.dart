@@ -152,7 +152,7 @@ class Chromosome {
       final columnCopies = column.where((e) => e.value == target.value).length;
       final squareCopies = square.where((e) => e.value == target.value).length;
 
-      target.copiesInRange = lineCopies + columnCopies + squareCopies - 2;
+      target.copiesInRange = lineCopies + columnCopies + squareCopies - 3;
       target.validShapes = [
         lineCopies,
         columnCopies,
@@ -171,8 +171,8 @@ class Chromosome {
       );
     }
 
-    final fitnessPerGene =
-        grid.cells.map((e) => pow(2, e.copiesInRange) as int);
+    final fitnessPerGene = grid.cells
+        .map((e) => pow(e.isFixed ? 5 : 2, e.copiesInRange) - 1 as int);
 
     fitness = fitnessPerGene.reduce((a, b) => a + b);
   }
@@ -191,7 +191,7 @@ class Chromosome {
 
     for (final square in squares) {
       if (random.nextDouble() > mutationRate) continue;
-      switch (random.nextInt(2)) {
+      switch (random.nextInt(3)) {
         case 0:
           var cell1 = random.nextInt(9);
           while (square[cell1].isFixed) {
@@ -227,6 +227,35 @@ class Chromosome {
           square[cell1] = square[cell2];
           square[cell2] = square[cell3];
           square[cell3] = auxiliarCell;
+          break;
+        case 2:
+          var originPosition = random.nextInt(9);
+          while (square[originPosition].isFixed) {
+            originPosition = random.nextInt(9);
+          }
+
+          var targetPosition = random.nextInt(9);
+          while (square[targetPosition].isFixed ||
+              originPosition == targetPosition) {
+            targetPosition = random.nextInt(9);
+          }
+
+          var currentPosition = targetPosition;
+          var poppedCell = square[originPosition];
+
+          while (currentPosition != originPosition) {
+            if (square[currentPosition].isFixed) {
+              currentPosition = (currentPosition + 1) % 9;
+              continue;
+            }
+            final auxiliarCell = poppedCell;
+            poppedCell = square[currentPosition];
+            square[currentPosition] = auxiliarCell;
+
+            currentPosition = (currentPosition + 1) % 9;
+          }
+
+          square[originPosition] = poppedCell;
           break;
       }
     }

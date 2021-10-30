@@ -34,7 +34,7 @@ class Cell {
   ///
   /// O alcance seria a linha, a coluna e o quadrado dos quais a célula
   /// participa.
-  var copiesInRange = 1;
+  var copiesInRange = 0;
 
   /// Armazena quantas formas concluídas a célula faz parte.
   ///
