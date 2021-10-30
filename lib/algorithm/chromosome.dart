@@ -18,15 +18,43 @@ class Chromosome {
   /// Caso sejam passadas células fixas, estas serão utilizadas para geração dos
   /// genes.
   Chromosome(List<Cell> fixedCells) {
-    genes = List.generate(81, (i) {
-      final fixedIndex = fixedCells.indexWhere(
-        (element) => element.cellNumber == i,
-      );
+    final fixedSquares = List.generate(
+      9,
+      (i) => fixedCells.where((e) => e.square == i + 1).toList(),
+    );
 
-      return fixedIndex == -1
-          ? Gene()
-          : Gene.fromCell(cell: fixedCells[fixedIndex]);
-    });
+    final generatedSquares = List.generate(
+      9,
+      (i) => List.generate(9, (j) => j + 1)
+        ..removeWhere(
+          (e) =>
+              fixedSquares[i].where((element) => element.value == e).isNotEmpty,
+        )
+        ..shuffle(),
+    );
+
+    var currentIndex = 0;
+    genes = <Gene>[];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          final fixedIndex = fixedCells.indexWhere(
+            (element) => element.cellNumber == currentIndex,
+          );
+
+          if (fixedIndex == -1) {
+            genes.add(Gene(
+              desiredValue: generatedSquares[(i ~/ 3) * 3 + j].removeLast(),
+            ));
+          } else {
+            genes.add(Gene.fromCell(cell: fixedCells[fixedIndex]));
+          }
+
+          currentIndex++;
+        }
+      }
+    }
     grid = Grid.fromChromosome(this);
   }
 

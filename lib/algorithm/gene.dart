@@ -10,8 +10,8 @@ import 'package:genetic_sudoku/models/cell.dart';
 /// * [_random] é um gerador de aleatoriedade.
 class Gene {
   /// Produz um gene aleatório.
-  Gene({this.isFixed = false}) {
-    value = _random.nextInt(9) + 1;
+  Gene({this.isFixed = false, int? desiredValue}) {
+    value = desiredValue ?? _random.nextInt(9) + 1;
   }
 
   /// Produz um gene a partir de uma célula fixa.
