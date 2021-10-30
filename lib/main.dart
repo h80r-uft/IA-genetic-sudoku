@@ -82,6 +82,11 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final smallestSize = width < height ? width : height;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Genetic Sudoku'),
@@ -112,8 +117,8 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                             child: SizedBox(
-                              width: 450,
-                              height: 450,
+                              width: smallestSize * 0.65,
+                              height: smallestSize * 0.65,
                               child: Center(
                                 child: GridWidget(
                                     grid: solution
@@ -122,16 +127,16 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                               ),
                             ),
                           ),
-                          const SizedBox(
-                            height: 20,
+                          SizedBox(
+                            height: smallestSize * 0.020,
                           ),
                           Card(
                             elevation: 6,
                             shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25)),
                             child: SizedBox(
-                              height: 130,
-                              width: 950,
+                              height: smallestSize * 0.20,
+                              width: width * 0.65,
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [

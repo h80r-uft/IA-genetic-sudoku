@@ -15,8 +15,13 @@ class GridWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final width = MediaQuery.of(context).size.width;
+    final height = MediaQuery.of(context).size.height;
+
+    final smallestSize = width < height ? width : height;
+
     return SizedBox(
-      width: 400,
+      width: smallestSize * 0.60,
       child: Table(
         border: TableBorder.symmetric(
           inside: BorderSide(color: primaryColor),
