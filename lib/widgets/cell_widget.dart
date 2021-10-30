@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:genetic_sudoku/assets/shema_colors.dart';
 import 'package:genetic_sudoku/models/cell.dart';
+import 'package:genetic_sudoku/theme/schema_colors.dart';
 
 class CellWidget extends StatelessWidget {
   const CellWidget({

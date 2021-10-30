@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:genetic_sudoku/assets/shema_colors.dart';
+import 'package:genetic_sudoku/models/cell.dart';
+import 'package:genetic_sudoku/theme/schema_colors.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
-import 'package:genetic_sudoku/models/cell.dart';
 
 void main() => runApp(const MyApp());
 
