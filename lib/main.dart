@@ -79,33 +79,88 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
       ),
       backgroundColor: scaffoldBackgroundColor,
       body: Center(
-        child: StreamBuilder(
-          stream: Stream.periodic(const Duration(milliseconds: 50)),
-          builder: (_, __) {
-            for (final solution in alternatives) {
-              if (!solution.isFinished()) {
-                solution.evolutionLoop();
-              }
-            }
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            StreamBuilder(
+              stream: Stream.periodic(const Duration(milliseconds: 50)),
+              builder: (_, __) {
+                for (final solution in alternatives) {
+                  if (!solution.isFinished()) {
+                    solution.evolutionLoop();
+                  }
+                }
 
-            final sortedAlgorithms = alternatives
-              ..sort((a, b) => a.generationsLog.last.fitness
-                  .compareTo(b.generationsLog.last.fitness));
+                final sortedAlgorithms = alternatives
+                  ..sort((a, b) => a.generationsLog.last.fitness
+                      .compareTo(b.generationsLog.last.fitness));
 
-            final solution = sortedAlgorithms.last;
+                final solution = sortedAlgorithms.last;
 
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                GridWidget(grid: solution.generationsLog.last.fittest),
-                Text('Current generation: '
-                    '${solution.generationsLog.last.generationNumber}'),
-                Text('Current fitness: ' +
-                    solution.generationsLog.last.fitness.toString()),
-                Text('Mutation rate: ' + solution.mutationRate.toString()),
-              ],
-            );
-          },
+                return Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    GridWidget(grid: solution.generationsLog.last.fittest),
+                    Text('Current generation: '
+                        '${solution.generationsLog.last.generationNumber}'),
+                    Text('Current fitness: ' +
+                        solution.generationsLog.last.fitness.toString()),
+                    Text('Mutation rate: ' + solution.mutationRate.toString()),
+                  ],
+                );
+              },
+            ),
+            ElevatedButton(
+              onPressed: () => showDialog(
+                context: context,
+                builder: (ctx) {
+                  final worstAlternative = alternatives.reduce(
+                    (a, b) => a.generationsLog.last.fitness >
+                            b.generationsLog.last.fitness
+                        ? a
+                        : b,
+                  );
+                  final bestAlternative = alternatives.reduce(
+                    (a, b) => a.generationsLog.last.fitness <
+                            b.generationsLog.last.fitness
+                        ? a
+                        : b,
+                  );
+                  final sum = alternatives.fold(
+                    {'generations': 0, 'fitness': 0},
+                    (Map<String, int> acc, cur) => {
+                      'generations':
+                          acc['generations']! + cur.generationsLog.length,
+                      'fitness':
+                          acc['fitness']! + cur.generationsLog.last.fitness
+                    },
+                  );
+
+                  return SimpleDialog(
+                    title: const Text('Resultados alcançados'),
+                    children: [
+                      Text('Melhor iteração: ' +
+                          bestAlternative.generationsLog.last.fitness
+                              .toString()),
+                      Text('Gerações desta iteração: ' +
+                          bestAlternative.generationsLog.length.toString()),
+                      Text('Pior iteração: ' +
+                          worstAlternative.generationsLog.last.fitness
+                              .toString()),
+                      Text('Gerações desta iteração: ' +
+                          worstAlternative.generationsLog.length.toString()),
+                      Text('Média de gerações: ' +
+                          (sum['generations']! / alternatives.length)
+                              .toString()),
+                      Text('Média de fitness: ' +
+                          (sum['fitness']! / alternatives.length).toString()),
+                    ],
+                  );
+                },
+              ),
+              child: const Text('Exibir resultados'),
+            ),
+          ],
         ),
       ),
     );
