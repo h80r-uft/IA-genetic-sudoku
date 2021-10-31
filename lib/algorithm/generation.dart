@@ -11,14 +11,15 @@ import 'package:genetic_sudoku/models/grid.dart';
 class Generation {
   /// Produz uma [Generation] aleatória.
   ///
-  /// A geração criada possuirá uma população de tamanho [size] e será
+  /// A geração criada possuirá uma população de tamanho [populationSize] e será
   /// preenchida com cromossomos gerados aleatoriamente.
   Generation({
     required this.generationNumber,
-    required int size,
+    required this.populationSize,
     required List<Cell> fixedCells,
   }) {
-    population = List.generate(size, (index) => Chromosome(fixedCells));
+    population =
+        List.generate(populationSize, (index) => Chromosome(fixedCells));
   }
 
   /// Reproduz a geração anterior para criar uma nova [Generation].
@@ -30,14 +31,14 @@ class Generation {
     required Generation previous,
     required double mutationRate,
     required double reproductionRate,
-  }) {
+  }) : populationSize = previous.populationSize {
     population = [];
     final random = Random();
 
-    while (population.length < previous.population.length) {
+    while (population.length < populationSize) {
       final crossingPoint = random.nextInt(8);
-      final parent1 = previous.getParent(tournamentSize: 0.05);
-      final parent2 = previous.getParent(tournamentSize: 0.05, avoid: parent1);
+      final parent1 = previous.getParent();
+      final parent2 = previous.getParent();
 
       population.add(parent1);
       population.add(parent2);
@@ -77,6 +78,8 @@ class Generation {
   /// O número da geração observada.
   final int generationNumber;
 
+  final int populationSize;
+
   /// Calcula a pontuação da geração atual.
   ///
   /// Chama a função [applyFitness] para cada cromossomo da população.
@@ -94,12 +97,14 @@ class Generation {
   /// Deste grupo, apenas o melhor será escolhido como pai válido.
   ///
   /// O [avoid] é opcional e indica um cromossomo que não deve ser escolhido.
-  Chromosome getParent({double tournamentSize = 0.1, Chromosome? avoid}) {
+  Chromosome getParent({double tournamentSize = 0.1}) {
     final pool = List.of(population)
-      ..remove(avoid)
       ..shuffle()
       ..take((tournamentSize * population.length).round());
-    return pool.reduce((best, e) => e.fitness < best.fitness ? e : best);
+    final selectedParent =
+        pool.reduce((best, e) => e.fitness < best.fitness ? e : best);
+    pool.remove(selectedParent);
+    return selectedParent;
   }
 
   /// Retorna o melhor cromossomo da geração.
