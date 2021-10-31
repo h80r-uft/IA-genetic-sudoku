@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:genetic_sudoku/models/cell.dart';
 import 'package:genetic_sudoku/theme/schema_colors.dart';
+import 'package:genetic_sudoku/widgets/chart_widget.dart';
 import 'package:genetic_sudoku/widgets/grid_widget.dart';
 import 'package:genetic_sudoku/algorithm/genetic_algorithm.dart';
 
@@ -111,20 +112,69 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                       return Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Card(
-                            elevation: 6,
-                            shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
-                            child: SizedBox(
-                              width: smallestSize * 0.65,
-                              height: smallestSize * 0.65,
-                              child: Center(
-                                child: GridWidget(
-                                    grid: solution
-                                        .generationsLog[selectedGeneration]
-                                        .fittest),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Card(
+                                elevation: 6,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: SizedBox(
+                                  width: smallestSize * 0.65,
+                                  height: smallestSize * 0.65,
+                                  child: Center(
+                                    child: GridWidget(
+                                        grid: solution
+                                            .generationsLog[selectedGeneration]
+                                            .fittest),
+                                  ),
+                                ),
                               ),
-                            ),
+                              SizedBox(
+                                width: smallestSize * 0.020,
+                              ),
+                              Card(
+                                color: primaryColor,
+                                elevation: 6,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(25),
+                                ),
+                                child: SizedBox(
+                                  width: smallestSize * 0.50,
+                                  height: smallestSize * 0.50,
+                                  child: Column(
+                                    children: const <Widget>[
+                                      SizedBox(
+                                        height: 37,
+                                      ),
+                                      Text(
+                                        'Histórico evolutivo',
+                                        style: TextStyle(
+                                          fontSize: 30,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        textAlign: TextAlign.center,
+                                      ),
+                                      SizedBox(
+                                        height: 37,
+                                      ),
+                                      Expanded(
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              right: 20, bottom: 5),
+                                          child: ChartWidget(),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        height: 10,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           SizedBox(
                             height: smallestSize * 0.020,
@@ -132,7 +182,8 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                           Card(
                             elevation: 6,
                             shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(25)),
+                              borderRadius: BorderRadius.circular(25),
+                            ),
                             child: SizedBox(
                               height: smallestSize * 0.20,
                               width: width * 0.65,
@@ -183,7 +234,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                           MaterialStateProperty.all(
                                               primaryColor),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                             ),
