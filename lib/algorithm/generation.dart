@@ -131,7 +131,7 @@ class GenerationLog {
   /// Simplifica a [generation] enviada, criando um novo [GenerationLog].
   GenerationLog.fromGeneration({required Generation generation})
       : fittest = generation.fittest.grid,
-        unfittest = generation.unfittest.grid,
+        unfittest = generation.unfittest.fitness,
         fitness = generation.fittest.fitness,
         generationNumber = generation.generationNumber;
 
@@ -142,8 +142,8 @@ class GenerationLog {
   /// apenas o que faz parte da representação visual do sudoku.
   final Grid fittest;
 
-  /// Sudoku do pior cromossomo da geração.
-  final Grid unfittest;
+  /// Pontuação do pior cromossomo da geração.
+  final int unfittest;
 
   /// Pontuação do melhor cromossomo da geração.
   final int fitness;

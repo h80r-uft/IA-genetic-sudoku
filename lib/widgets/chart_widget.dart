@@ -1,100 +1,76 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:genetic_sudoku/algorithm/generation.dart';
 
 class ChartWidget extends StatelessWidget {
-  const ChartWidget({Key? key}) : super(key: key);
+  const ChartWidget({Key? key, required this.generationsLog}) : super(key: key);
+
+  final List<GenerationLog> generationsLog;
 
   @override
   Widget build(BuildContext context) {
     return LineChart(
-      sampleData1,
+      sampleData,
       swapAnimationDuration: const Duration(milliseconds: 250),
     );
   }
 
-  LineChartData get sampleData1 => LineChartData(
-        lineTouchData: lineTouchData1,
-        gridData: gridData,
-        titlesData: titlesData1,
+  LineChartData get sampleData => LineChartData(
+        lineTouchData: lineTouchData,
+        gridData: FlGridData(show: false),
+        titlesData: titlesData,
         borderData: borderData,
-        lineBarsData: lineBarsData1,
+        lineBarsData: lineBarsData,
         minX: 0,
-        maxX: 14,
-        maxY: 4,
+        maxX: 1000,
+        maxY: 250,
         minY: 0,
       );
 
-  LineTouchData get lineTouchData1 => LineTouchData(
+  LineTouchData get lineTouchData => LineTouchData(
         handleBuiltInTouches: true,
         touchTooltipData: LineTouchTooltipData(
           tooltipBgColor: Colors.blueGrey.withOpacity(0.8),
         ),
       );
 
-  FlTitlesData get titlesData1 => FlTitlesData(
-        bottomTitles: bottomTitles,
+  FlTitlesData get titlesData => FlTitlesData(
         rightTitles: SideTitles(showTitles: false),
         topTitles: SideTitles(showTitles: false),
-        leftTitles: leftTitles(
-          getTitles: (value) {
-            switch (value.toInt()) {
-              case 1:
-                return '1m';
-              case 2:
-                return '2m';
-              case 3:
-                return '3m';
-              case 4:
-                return '5m';
-            }
-            return '';
-          },
-        ),
+        bottomTitles: bottomTitles,
+        leftTitles: leftTitles,
       );
 
-  List<LineChartBarData> get lineBarsData1 => [
-        lineChartBarData1_1,
-        lineChartBarData1_2,
-        lineChartBarData1_3,
+  List<LineChartBarData> get lineBarsData => [
+        fittest,
+        unfittest,
       ];
 
-  SideTitles leftTitles({required GetTitleFunction getTitles}) => SideTitles(
-        getTitles: getTitles,
+  SideTitles get leftTitles => SideTitles(
         showTitles: true,
         margin: 8,
-        interval: 1,
+        interval: 20,
         reservedSize: 40,
         getTextStyles: (context, value) => const TextStyle(
           color: Color(0xff75729e),
           fontWeight: FontWeight.bold,
-          fontSize: 14,
+          fontSize: 12,
         ),
+        getTitles: (value) => value.toStringAsFixed(0),
       );
 
   SideTitles get bottomTitles => SideTitles(
         showTitles: true,
         reservedSize: 22,
         margin: 10,
-        interval: 1,
+        interval: 100,
         getTextStyles: (context, value) => const TextStyle(
           color: Color(0xff72719b),
           fontWeight: FontWeight.bold,
-          fontSize: 16,
+          fontSize: 12,
         ),
-        getTitles: (value) {
-          switch (value.toInt()) {
-            case 2:
-              return 'SEPT';
-            case 7:
-              return 'OCT';
-            case 12:
-              return 'DEC';
-          }
-          return '';
-        },
+        getTitles: (value) => value.toStringAsFixed(0),
       );
-
-  FlGridData get gridData => FlGridData(show: false);
 
   FlBorderData get borderData => FlBorderData(
         show: true,
@@ -106,56 +82,35 @@ class ChartWidget extends StatelessWidget {
         ),
       );
 
-  LineChartBarData get lineChartBarData1_1 => LineChartBarData(
+  LineChartBarData get fittest => LineChartBarData(
         isCurved: true,
         colors: [const Color(0xff4af699)],
-        barWidth: 8,
+        barWidth: 2,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 1.5),
-          FlSpot(5, 1.4),
-          FlSpot(7, 3.4),
-          FlSpot(10, 2),
-          FlSpot(12, 2.2),
-          FlSpot(13, 1.8),
-        ],
+        spots: generationsLog
+            .map<FlSpot>((e) => FlSpot(
+                  e.generationNumber.toDouble(),
+                  e.fitness.toDouble(),
+                ))
+            .toList(),
       );
 
-  LineChartBarData get lineChartBarData1_2 => LineChartBarData(
+  LineChartBarData get unfittest => LineChartBarData(
         isCurved: true,
         colors: [const Color(0xffaa4cfc)],
-        barWidth: 8,
+        barWidth: 2,
         isStrokeCapRound: true,
         dotData: FlDotData(show: false),
         belowBarData: BarAreaData(show: false, colors: [
           const Color(0x00aa4cfc),
         ]),
-        spots: const [
-          FlSpot(1, 1),
-          FlSpot(3, 2.8),
-          FlSpot(7, 1.2),
-          FlSpot(10, 2.8),
-          FlSpot(12, 2.6),
-          FlSpot(13, 3.9),
-        ],
-      );
-
-  LineChartBarData get lineChartBarData1_3 => LineChartBarData(
-        isCurved: true,
-        colors: const [Color(0xff27b6fc)],
-        barWidth: 8,
-        isStrokeCapRound: true,
-        dotData: FlDotData(show: false),
-        belowBarData: BarAreaData(show: false),
-        spots: const [
-          FlSpot(1, 2.8),
-          FlSpot(3, 1.9),
-          FlSpot(6, 3),
-          FlSpot(10, 1.3),
-          FlSpot(13, 2.5),
-        ],
+        spots: generationsLog
+            .map<FlSpot>((e) => FlSpot(
+                  e.generationNumber.toDouble(),
+                  e.unfittest.toDouble(),
+                ))
+            .toList(),
       );
 }

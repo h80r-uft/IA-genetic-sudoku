@@ -144,11 +144,9 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                   width: smallestSize * 0.50,
                                   height: smallestSize * 0.50,
                                   child: Column(
-                                    children: const <Widget>[
-                                      SizedBox(
-                                        height: 37,
-                                      ),
-                                      Text(
+                                    children: <Widget>[
+                                      const SizedBox(height: 37),
+                                      const Text(
                                         'Histórico evolutivo',
                                         style: TextStyle(
                                           fontSize: 30,
@@ -157,19 +155,20 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                                         ),
                                         textAlign: TextAlign.center,
                                       ),
-                                      SizedBox(
-                                        height: 37,
-                                      ),
+                                      const SizedBox(height: 37),
                                       Expanded(
                                         child: Padding(
-                                          padding: EdgeInsets.only(
-                                              right: 20, bottom: 5),
-                                          child: ChartWidget(),
+                                          padding: const EdgeInsets.only(
+                                            right: 20,
+                                            bottom: 5,
+                                          ),
+                                          child: ChartWidget(
+                                            generationsLog:
+                                                solution.generationsLog,
+                                          ),
                                         ),
                                       ),
-                                      SizedBox(
-                                        height: 10,
-                                      ),
+                                      const SizedBox(height: 10),
                                     ],
                                   ),
                                 ),
