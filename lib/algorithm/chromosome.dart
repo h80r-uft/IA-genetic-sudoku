@@ -18,15 +18,43 @@ class Chromosome {
   /// Caso sejam passadas células fixas, estas serão utilizadas para geração dos
   /// genes.
   Chromosome(List<Cell> fixedCells) {
-    genes = List.generate(81, (i) {
-      final fixedIndex = fixedCells.indexWhere(
-        (element) => element.cellNumber == i,
-      );
+    final fixedSquares = List.generate(
+      9,
+      (i) => fixedCells.where((e) => e.square == i + 1).toList(),
+    );
 
-      return fixedIndex == -1
-          ? Gene()
-          : Gene.fromCell(cell: fixedCells[fixedIndex]);
-    });
+    final generatedSquares = List.generate(
+      9,
+      (i) => List.generate(9, (j) => j + 1)
+        ..removeWhere(
+          (e) =>
+              fixedSquares[i].where((element) => element.value == e).isNotEmpty,
+        )
+        ..shuffle(),
+    );
+
+    var currentIndex = 0;
+    genes = <Gene>[];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          final fixedIndex = fixedCells.indexWhere(
+            (element) => element.cellNumber == currentIndex,
+          );
+
+          if (fixedIndex == -1) {
+            genes.add(Gene(
+              desiredValue: generatedSquares[(i ~/ 3) * 3 + j].removeLast(),
+            ));
+          } else {
+            genes.add(Gene.fromCell(cell: fixedCells[fixedIndex]));
+          }
+
+          currentIndex++;
+        }
+      }
+    }
     grid = Grid.fromChromosome(this);
   }
 
@@ -43,22 +71,53 @@ class Chromosome {
     required int crossingPoint,
     required double mutationRate,
   }) {
-    final genes1 = parent1.genes.sublist(0, crossingPoint);
-    final genes2 = parent2.genes.sublist(crossingPoint);
-    genes = List.from(genes1)..addAll(genes2);
+    final selectedSquares1 = List.generate(
+      crossingPoint + 1,
+      (i) => parent1.grid.cells
+          .where(
+            (e) => e.square == i + 1,
+          )
+          .toList(),
+    );
+
+    final selectedSquares2 = List.generate(
+      8 - crossingPoint,
+      (i) => parent2.grid.cells
+          .where(
+            (e) => e.square == crossingPoint + 2 + i,
+          )
+          .toList(),
+    );
+
+    final allSquares = List<List<Cell>>.from(selectedSquares1)
+      ..addAll(selectedSquares2);
+
+    genes = [];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          genes.add(
+              Gene.fromCell(cell: allSquares[(i ~/ 3) * 3 + j].removeAt(0)));
+        }
+      }
+    }
+
+    // final genes1 = parent1.genes.sublist(0, crossingPoint);
+    // final genes2 = parent2.genes.sublist(crossingPoint);
+    // genes = List.from(genes1)..addAll(genes2);
+    grid = Grid.fromChromosome(this);
 
     _mutate(mutationRate: mutationRate);
-
-    grid = Grid.fromChromosome(this);
   }
 
   /// Armazena a lista de genes deste cromossomo.
   ///
   /// Cada gene pode ser compreendido como uma célula do sudoku.
-  late final List<Gene> genes;
+  late List<Gene> genes;
 
   /// Armazena a representação visual deste cromossomo no aplicativo.
-  late final Grid grid;
+  late Grid grid;
 
   /// Armazena a pontuação do cromossomo atual.
   late int fitness;
@@ -93,7 +152,7 @@ class Chromosome {
       final columnCopies = column.where((e) => e.value == target.value).length;
       final squareCopies = square.where((e) => e.value == target.value).length;
 
-      target.copiesInRange = lineCopies + columnCopies + squareCopies - 2;
+      target.copiesInRange = lineCopies + columnCopies + squareCopies - 3;
       target.validShapes = [
         lineCopies,
         columnCopies,
@@ -113,7 +172,7 @@ class Chromosome {
     }
 
     final fitnessPerGene =
-        grid.cells.map((e) => pow(2, e.copiesInRange) as int);
+        grid.cells.map((e) => pow(2, e.copiesInRange) - 1 as int);
 
     fitness = fitnessPerGene.reduce((a, b) => a + b);
   }
@@ -124,12 +183,94 @@ class Chromosome {
   /// [mutationRate] do gene sofrer mutação. Neste caso, o gene é trocado por
   /// outro gene produzido de forma aleatória.
   void _mutate({required double mutationRate}) {
-    for (var i = 0; i < genes.length; i++) {
-      if (genes[i].isFixed) continue;
-      if (Random().nextDouble() < mutationRate) {
-        genes[i] = Gene();
+    final random = Random();
+    final squares = List.generate(
+      9,
+      (i) => grid.cells.where((e) => e.square == i + 1).toList(),
+    );
+
+    for (final square in squares) {
+      if (random.nextDouble() > mutationRate) continue;
+      switch (random.nextInt(3)) {
+        case 0:
+          var cell1 = random.nextInt(9);
+          while (square[cell1].isFixed) {
+            cell1 = random.nextInt(9);
+          }
+
+          var cell2 = random.nextInt(9);
+          while (square[cell2].isFixed || cell1 == cell2) {
+            cell2 = random.nextInt(9);
+          }
+
+          final auxiliarCell = square[cell1];
+          square[cell1] = square[cell2];
+          square[cell2] = auxiliarCell;
+          break;
+        case 1:
+          var cell1 = random.nextInt(9);
+          while (square[cell1].isFixed) {
+            cell1 = random.nextInt(9);
+          }
+
+          var cell2 = random.nextInt(9);
+          while (square[cell2].isFixed || cell1 == cell2) {
+            cell2 = random.nextInt(9);
+          }
+
+          var cell3 = random.nextInt(9);
+          while (square[cell3].isFixed || cell1 == cell3 || cell2 == cell3) {
+            cell3 = random.nextInt(9);
+          }
+
+          final auxiliarCell = square[cell1];
+          square[cell1] = square[cell2];
+          square[cell2] = square[cell3];
+          square[cell3] = auxiliarCell;
+          break;
+        case 2:
+          var originPosition = random.nextInt(9);
+          while (square[originPosition].isFixed) {
+            originPosition = random.nextInt(9);
+          }
+
+          var targetPosition = random.nextInt(9);
+          while (square[targetPosition].isFixed ||
+              originPosition == targetPosition) {
+            targetPosition = random.nextInt(9);
+          }
+
+          var currentPosition = targetPosition;
+          var poppedCell = square[originPosition];
+
+          while (currentPosition != originPosition) {
+            if (square[currentPosition].isFixed) {
+              currentPosition = (currentPosition + 1) % 9;
+              continue;
+            }
+            final auxiliarCell = poppedCell;
+            poppedCell = square[currentPosition];
+            square[currentPosition] = auxiliarCell;
+
+            currentPosition = (currentPosition + 1) % 9;
+          }
+
+          square[originPosition] = poppedCell;
+          break;
       }
     }
+
+    genes = [];
+
+    for (var i = 0; i < 9; i++) {
+      for (var j = 0; j < 3; j++) {
+        for (var k = 0; k < 3; k++) {
+          genes.add(Gene.fromCell(cell: squares[(i ~/ 3) * 3 + j].removeAt(0)));
+        }
+      }
+    }
+
+    grid = Grid.fromChromosome(this);
   }
 
   @override

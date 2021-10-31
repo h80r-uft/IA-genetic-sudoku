@@ -20,6 +20,7 @@ class GeneticAlgorithm {
     required this.maxGenerations,
     required this.populationSize,
     required this.mutationRate,
+    required this.reproductionRate,
     required this.fixedCells,
   });
 
@@ -34,6 +35,8 @@ class GeneticAlgorithm {
 
   /// A chance de mutação do algoritmo.
   final double mutationRate;
+
+  final double reproductionRate;
 
   /// Uma lista que armazena as células fixas de um sudoku difícil.
   final List<Cell> fixedCells;
@@ -85,6 +88,7 @@ class GeneticAlgorithm {
       generationNumber: generations.last.generationNumber + 1,
       previous: generations.last,
       mutationRate: mutationRate,
+      reproductionRate: reproductionRate,
     ));
 
     memoryHandler();
