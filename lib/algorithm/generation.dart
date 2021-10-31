@@ -29,31 +29,43 @@ class Generation {
     required this.generationNumber,
     required Generation previous,
     required double mutationRate,
+    required double reproductionRate,
   }) {
-    final elitism = previous.fittest;
-
-    population = [elitism];
+    population = [];
+    final random = Random();
 
     while (population.length < previous.population.length) {
-      final crossingPoint = Random().nextInt(8);
-      final parent1 = previous.getParent();
-      final parent2 = previous.getParent(avoid: parent1);
+      final crossingPoint = random.nextInt(8);
+      final parent1 = previous.getParent(tournamentSize: 0.05);
+      final parent2 = previous.getParent(tournamentSize: 0.05, avoid: parent1);
 
-      final child1 = Chromosome.fromParents(
-        parent1,
-        parent2,
-        crossingPoint: crossingPoint,
-        mutationRate: mutationRate,
-      )..applyFitness();
+      population.add(parent1);
+      population.add(parent2);
 
-      final child2 = Chromosome.fromParents(
-        parent2,
-        parent1,
-        crossingPoint: crossingPoint,
-        mutationRate: mutationRate,
-      )..applyFitness();
+      if (random.nextDouble() < reproductionRate) {
+        final child1 = Chromosome.fromParents(
+          parent1,
+          parent2,
+          crossingPoint: crossingPoint,
+          mutationRate: mutationRate,
+        )..applyFitness();
 
-      population.add(child1.fitness < child2.fitness ? child1 : child2);
+        population.add(child1);
+
+        final child2 = Chromosome.fromParents(
+          parent2,
+          parent1,
+          crossingPoint: crossingPoint,
+          mutationRate: mutationRate,
+        )..applyFitness();
+
+        population.add(child2);
+      }
+    }
+
+    while (population.length > previous.population.length) {
+      population.shuffle();
+      population.removeLast();
     }
   }
 

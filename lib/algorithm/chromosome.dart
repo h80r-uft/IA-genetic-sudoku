@@ -171,8 +171,8 @@ class Chromosome {
       );
     }
 
-    final fitnessPerGene = grid.cells
-        .map((e) => pow(e.isFixed ? 5 : 2, e.copiesInRange) - 1 as int);
+    final fitnessPerGene =
+        grid.cells.map((e) => pow(2, e.copiesInRange) - 1 as int);
 
     fitness = fitnessPerGene.reduce((a, b) => a + b);
   }

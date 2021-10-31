@@ -37,8 +37,9 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
   /// resolvido pelo algoritmo.
   final solution = GeneticAlgorithm(
     maxGenerations: 1000000,
-    populationSize: 50,
+    populationSize: 100,
     mutationRate: 0.2,
+    reproductionRate: 0.4,
     fixedCells: [
       [7, 1],
       [2, 4],
