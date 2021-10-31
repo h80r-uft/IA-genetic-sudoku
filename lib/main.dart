@@ -37,7 +37,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
   /// A execução será encerrada antes de 100.000 gerações caso o sudoku seja
   /// resolvido pelo algoritmo.
   final solution = GeneticAlgorithm(
-    maxGenerations: 1000000,
+    maxGenerations: 1000,
     populationSize: 100,
     mutationRate: 0.2,
     reproductionRate: 0.4,
