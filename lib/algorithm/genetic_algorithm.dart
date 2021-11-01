@@ -65,7 +65,7 @@ class GeneticAlgorithm {
   /// desta em [generationsLog].
   void initialize() {
     generations.add(Generation(
-      generationNumber: 1,
+      generationNumber: 0,
       populationSize: populationSize,
       fixedCells: fixedCells,
     )..applyFitness());
