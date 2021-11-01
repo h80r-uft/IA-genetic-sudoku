@@ -95,7 +95,7 @@ class _GeneticSudokuState extends State<GeneticSudoku> {
                   ..sort((a, b) => a.generationsLog.last.fitness
                       .compareTo(b.generationsLog.last.fitness));
 
-                final solution = sortedAlgorithms.last;
+                final solution = sortedAlgorithms.first;
 
                 return Column(
                   mainAxisSize: MainAxisSize.min,
